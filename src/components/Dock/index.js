@@ -1,11 +1,11 @@
 import React from 'react';
 import { View,Text,StyleSheet,TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
-
+import { useState } from 'react';
 export default function Dock() {
  return (
-    <View style={styles.container}>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttons}>
+    <View style={styles.containerDock}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageCadastro}>
             <AntDesign name="pluscircleo" size={30} color="#808080"/>
         </TouchableOpacity>
     </View>
@@ -13,7 +13,7 @@ export default function Dock() {
 }
 
 const styles = StyleSheet.create({
-    container:{
+    containerDock:{
         flexDirection: 'row',
         justifyContent: 'space-around',
         height:70,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#B0C4DE',
         alignItems: 'center',
     },
-    buttons:{
+    buttonsDock:{
         padding:5,
         backgroundColor: '#fff',
         borderRadius: 13,

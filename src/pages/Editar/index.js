@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
-export function Cadastro({closeWindow}) {
+export function Editar({closeWindow, value}) {
 
  return (
   <View style={styles.container}>
-    <Text style={styles.titulo}>Cadastro</Text>
+    <Text style={styles.titulo}>Editar</Text>
     <ScrollView showsVerticalScrollIndicator={false}>
-      <TextInput style={styles.input} placeholder="Name"/>
+      <TextInput style={styles.input} placeholder="Name" value={value}/>
       <TextInput style={styles.input} placeholder="Status"/>
       <TextInput style={styles.input} placeholder="Release"/>
       <TextInput style={styles.input} placeholder="Episode"/>
@@ -15,8 +15,8 @@ export function Cadastro({closeWindow}) {
     
     <View style={styles.container2}>
 
-      <TouchableOpacity activeOpacity={0.3} style={styles.buttonStyle} onPress={() => {alert("Salvo")}}>
-        <Text style={styles.buttonText}>Salvar</Text>
+      <TouchableOpacity activeOpacity={0.3} style={styles.buttonStyle}>
+        <Text style={styles.buttonText}>Atualizar</Text>
       </TouchableOpacity>
 
       <TouchableOpacity activeOpacity={0.3} style={styles.buttonStyle} onPress={closeWindow}>

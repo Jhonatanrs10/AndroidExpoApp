@@ -1,14 +1,16 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Home } from './pages/Home'
+import { Animes } from './pages/Animes'
 import { Cadastro } from './pages/Cadastro'
+import { Editar } from './pages/Editar'
 
 const Tab = createBottomTabNavigator();
 
 export function Routes(){
     return(
         <Tab.Navigator>
-            <Tab.Screen name="Home" component={Home}/>
-            <Tab.Screen name="Cadastro" component={Cadastro}/>
+            <Tab.Screen name="Animes" component={Animes}/>
+            <Tab.Screen name="Carteira" component={Cadastro}/>
+            <Tab.Screen name="Mercado" component={Editar}/>
         </Tab.Navigator>
     )
 }
