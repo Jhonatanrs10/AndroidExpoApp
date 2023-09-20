@@ -5,24 +5,7 @@ export function Editar({closeWindow, value}) {
 
  return (
   <View style={styles.container}>
-    <Text style={styles.titulo}>Editar</Text>
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <TextInput style={styles.input} placeholder="Name" value={value}/>
-      <TextInput style={styles.input} placeholder="Status"/>
-      <TextInput style={styles.input} placeholder="Release"/>
-      <TextInput style={styles.input} placeholder="Episode"/>
-    </ScrollView>
-    
-    <View style={styles.container2}>
-
-      <TouchableOpacity activeOpacity={0.3} style={styles.buttonStyle}>
-        <Text style={styles.buttonText}>Atualizar</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity activeOpacity={0.3} style={styles.buttonStyle} onPress={closeWindow}>
-        <Text style={styles.buttonText}>Sair</Text>
-      </TouchableOpacity>
-    </View>
+    <Text style={styles.titulo}>TESTE</Text>
   </View>
   )
 }

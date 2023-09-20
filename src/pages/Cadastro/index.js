@@ -1,21 +1,57 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Cadastro({closeWindow}) {
+
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [status, setStatus] = useState("");
+  const [release, setRelease] = useState("");
+  const [episode, setEpisode] = useState("");
+
+  async function salvarNew(){
+    try{
+
+      const newData = {
+        id,
+        name,
+        status,
+        release,
+        episode
+      }
+  
+      const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
+      const previousData = response ? JSON.parse(response) : [];
+      const data = [...previousData, newData];
+
+      await AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes",JSON.stringify(data));
+
+      alert("Salvo com Sucesso.");
+
+    }catch(error){
+
+      console.log(error);
+      alert("Não foi possível cadastrar");
+
+    }
+    
+  }
 
  return (
   <View style={styles.container}>
     <Text style={styles.titulo}>Cadastro</Text>
     <ScrollView showsVerticalScrollIndicator={false}>
-      <TextInput style={styles.input} placeholder="Name"/>
-      <TextInput style={styles.input} placeholder="Status"/>
-      <TextInput style={styles.input} placeholder="Release"/>
-      <TextInput style={styles.input} placeholder="Episode"/>
+      <TextInput style={styles.input} placeholder="Id" onChangeText={setId}/>
+      <TextInput style={styles.input} placeholder="Name" onChangeText={setName}/>
+      <TextInput style={styles.input} placeholder="Status" onChangeText={setStatus}/>
+      <TextInput style={styles.input} placeholder="Release" onChangeText={setRelease}/>
+      <TextInput style={styles.input} placeholder="Episode" onChangeText={setEpisode}/>
     </ScrollView>
     
     <View style={styles.container2}>
 
-      <TouchableOpacity activeOpacity={0.3} style={styles.buttonStyle} onPress={() => {alert("Salvo")}}>
+      <TouchableOpacity activeOpacity={0.3} style={styles.buttonStyle} onPress={salvarNew}>
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
 
@@ -31,9 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     borderRadius: 10,
-    margin:20,
-    marginTop:70,
-    marginBottom:150,
+   
   },
   titulo:{
     margin:10,

@@ -9,7 +9,7 @@ export function Routes(){
     return(
         <Tab.Navigator>
             <Tab.Screen name="Animes" component={Animes}/>
-            <Tab.Screen name="Carteira" component={Cadastro}/>
+            <Tab.Screen name="Carteira" component={Editar}/>
             <Tab.Screen name="Mercado" component={Editar}/>
         </Tab.Navigator>
     )
