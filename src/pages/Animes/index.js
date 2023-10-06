@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity,Modal, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity,Modal, ScrollView, FlatList } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 import { Cadastro } from '../Cadastro';
 import { Editar } from '../Editar';
@@ -15,12 +15,9 @@ export function Animes() {
     const data = response ? JSON.parse(response) : [];
     setData(data);
     for (var i=0; i < data.length; i++) {
-
       console.log(data[i].name); 
 
-      
     }
-
   }
   
 //////////
@@ -58,10 +55,8 @@ async function importData(){
 
     try{
       
-      for (var i=0; i < animes.length; i++) {
+      for (var i=0; i < animes.length - 1 ; i++) {
       
-       
-
         const pAnimes = animes[i].split(',');
         const id = pAnimes[0];
         const name = pAnimes[1];
@@ -117,13 +112,13 @@ async function importData(){
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
    
-        <Text style={styles.contentText} backgroundColor={'red'} onPress={abrirPageCadastro} closeWindow={() => setPageEditar(false)}>OLAAA</Text>
+        <Text style={styles.contentText} backgroundColor={'red'} onPress={abrirPageCadastro} closeWindow={() => setPageEditar(false)}></Text>
 
       </ScrollView>
 
       <View style={styles.containerDock}>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageCadastro}>
-          <AntDesign name="pluscircleo" size={30} color="#808080"/>
+          <AntDesign name="plus" size={30} color="#808080"/>
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={importData}>
           <AntDesign name="up" size={30} color="#808080"/>
@@ -133,6 +128,9 @@ async function importData(){
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={deleteData}>
           <AntDesign name="delete" size={30} color="#808080"/>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={mostrarData}>
+          <AntDesign name="database" size={30} color="#808080"/>
         </TouchableOpacity>
       </View>
 
@@ -152,9 +150,11 @@ async function importData(){
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 50,
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: '#C0C0C0'
+    //backgroundColor: '#C0C0C0'
+    backgroundColor: '#ffffff'
   },
   content:{
     flex: 1,

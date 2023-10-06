@@ -29,6 +29,8 @@ export function Cadastro({closeWindow}) {
 
       alert("Salvo com Sucesso.");
 
+      closeWindow();
+
     }catch(error){
 
       console.log(error);
