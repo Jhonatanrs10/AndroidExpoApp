@@ -4,19 +4,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Cadastro({closeWindow}) {
 
-  const [id, setId] = useState("");
+
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
   const [release, setRelease] = useState("");
   const [episode, setEpisode] = useState("");
 
   async function salvarNew(){
+    const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
+    const data = response ? JSON.parse(response) : [];
+    const nextId = data.length + 1
     try{
 
       const newData = {
-        id,
+        id: nextId,
         name,
         status,
+        release,
         release,
         episode
       }
@@ -44,7 +48,6 @@ export function Cadastro({closeWindow}) {
   <View style={styles.container}>
     <Text style={styles.titulo}>Cadastro</Text>
     <ScrollView showsVerticalScrollIndicator={false}>
-      <TextInput style={styles.input} placeholder="Id" onChangeText={setId}/>
       <TextInput style={styles.input} placeholder="Name" onChangeText={setName}/>
       <TextInput style={styles.input} placeholder="Status" onChangeText={setStatus}/>
       <TextInput style={styles.input} placeholder="Release" onChangeText={setRelease}/>
@@ -73,6 +76,7 @@ const styles = StyleSheet.create({
   },
   titulo:{
     margin:10,
+    padding:10,
     fontWeight: 'bold',
     fontSize: 25,
     textAlign: 'center',
@@ -80,9 +84,10 @@ const styles = StyleSheet.create({
   input:{  
     textAlign: 'center',
     backgroundColor: '#B0C4DE',
+    marginTop: 5,
     marginBottom: 10,
-    marginStart: '10%',
-    marginEnd: '10%',
+    marginStart: '20%',
+    marginEnd: '20%',
     padding: 10,
     borderRadius: 10
   },

@@ -1,0 +1,12 @@
+JRSAnimes
+
+Description: 
+Programa que armazena dados de animes
+
+Objective:
+(1) Animes (id, name, status, release, url, obs, episodies)
+criar
+excluir
+editar
+mostrar lista com os animes por status e release
+
