@@ -39,9 +39,6 @@ export function Confirmar({closeWindow}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 80,
-    marginTop: 400,
-    marginBottom: 400,
     backgroundColor: '#fff',
     borderRadius: 10,
     justifyContent: 'center',
