@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "myapp",
+    "name": "AnimesJRS",
     "slug": "myapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/jrs.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/jrs-loading.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,12 +19,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/jrs.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jhonatanrs10.animesjrs"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "59d58ef9-daea-4a3a-bd5d-17b9e38e9c10"
+      }
     }
   }
 }

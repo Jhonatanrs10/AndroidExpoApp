@@ -4,9 +4,9 @@ import { Animes } from "./src/pages/Animes";
 
 export default function App() {
   return (
-   /* <NavigationContainer>
+   <NavigationContainer>
       <Routes/>
-    </NavigationContainer>*/
-    <Animes/> 
+    </NavigationContainer>
+    //<Animes/> 
   );
 }
