@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "AnimesJRS",
-    "slug": "myapp",
+    "name": "Jhonatanrs",
+    "slug": "JhonatanrsApp",
+    "owner": "jhonatanrs10",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/jrs.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/jrs-loading.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,17 +20,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/jrs.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jhonatanrs10.animesjrs"
+      "package": "com.jhonatanrs10.jhonatanrsapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "59d58ef9-daea-4a3a-bd5d-17b9e38e9c10"
+        "projectId": "f450d281-ad80-45a4-81a2-19560fea5681"
       }
     }
   }

@@ -1,5 +1,5 @@
 {
-  "name": "myapp",
+  "name": "JhonatanrsApp",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -9,19 +9,21 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/webpack-config": "^19.0.0",
     "@react-native-async-storage/async-storage": "1.18.2",
-    "@react-navigation/bottom-tabs": "^6.5.8",
-    "@react-navigation/native": "^6.1.7",
-    "expo": "^49.0.11",
-    "expo-cli": "^6.3.10",
+    "@react-navigation/bottom-tabs": "^6.5.9",
+    "@react-navigation/native": "^6.1.8",
+    "expo": "~49.0.13",
     "expo-clipboard": "~4.3.1",
+    "expo-file-system": "~15.4.4",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
-    "react-dom": "^18.2.0",
-    "react-native": "0.72.3",
+    "react-dom": "18.2.0",
+    "react-native": "0.72.5",
+    "react-native-async-storage": "^0.0.1",
     "react-native-fs": "^2.20.0",
-    "react-native-safe-area-context": "^4.7.2",
-    "react-native-screens": "^3.25.0",
+    "react-native-safe-area-context": "4.6.3",
+    "react-native-screens": "~3.22.0",
     "react-native-web": "~0.19.6"
   },
   "devDependencies": {
