@@ -21,16 +21,7 @@ const actions = {
           exportData += (data[i].name)+',';
           exportData += (data[i].status)+',';
           exportData += (data[i].release)+',';
-          exportData += (data[i].season01)+',';
-          exportData += (data[i].season02)+',';
-          exportData += (data[i].season03)+',';
-          exportData += (data[i].season04)+',';
-          exportData += (data[i].season05)+',';
-          exportData += (data[i].season06)+',';
-          exportData += (data[i].season07)+',';
-          exportData += (data[i].season08)+',';
-          exportData += (data[i].season09)+',';
-          exportData += (data[i].season10);
+          exportData += (data[i].episode);
           exportDataTxt += (exportData)+';\n';
         }
       
@@ -58,32 +49,14 @@ const actions = {
             const name = pAnimes[0];
             const status = pAnimes[1];
             const release = pAnimes[2];
-            const season01 = pAnimes[3];
-            const season02 = pAnimes[4];
-            const season03 = pAnimes[5];
-            const season04 = pAnimes[6];
-            const season05 = pAnimes[7];
-            const season06 = pAnimes[8];
-            const season07 = pAnimes[9];
-            const season08 = pAnimes[10];
-            const season09 = pAnimes[11];
-            const season10 = pAnimes[12];
+            const episode= pAnimes[3];
     
             const inewData = {
               id,
               name,
               status,
               release,
-              season01,
-              season02,
-              season03,
-              season04,
-              season05,
-              season06,
-              season07,
-              season08,
-              season09,
-              season10
+              episode
             }
             
     
