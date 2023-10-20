@@ -7,7 +7,6 @@ import onChanged from 'react-native'
 
 export function Cadastro({ closeWindow }) {
 
-
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Watching");
   const [release, setRelease] = useState("Monday");
@@ -184,8 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   form: {
-    marginStart: '5%',
-    marginEnd: '5%',
+    margin:'10%'
   },
   seasons: {
     flexDirection: 'row',

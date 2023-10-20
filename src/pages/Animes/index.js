@@ -140,14 +140,14 @@ const styles = StyleSheet.create({
     //marginTop: statusBarHeight,
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
   },
   window: {
     flex: 1,
     margin: 15,
     borderRadius: 11,
     borderColor: 'black',
-    paddingBottom: 1,
+    paddingBottom: 0,
     borderWidth: 1,
     backgroundColor: '#fff'
   },
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    marginBottom: 1,
+    marginBottom: 0,
   },
   content: {
     flex: 1,
