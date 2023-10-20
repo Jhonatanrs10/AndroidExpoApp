@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     textAlign: 'center',
-   
+    paddingStart: '10%',
+    paddingEnd: '10%'
   },
   titulo:{
     margin:10,

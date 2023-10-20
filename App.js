@@ -5,6 +5,9 @@ import actions from './src/pages/Animes/data';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons'
 import { Cadastro } from './src/pages/Animes/add';
+import * as SystemUI from 'expo-system-ui';
+
+const color = await SystemUI.getBackgroundColorAsync("white");
 
 const statusBarHeight = StatusBar.currentHeight;
 
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
   container: {
     //marginTop: statusBarHeight,
     flex: 1,
-    backgroundColor: '#B0C4DE',
+    backgroundColor: color,
     padding: '15%',
     flexDirection: 'row',
   },

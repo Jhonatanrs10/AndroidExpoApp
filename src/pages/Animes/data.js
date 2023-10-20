@@ -13,6 +13,8 @@ const actions = {
       exportData += (data[i].name) + ',';
       exportData += (data[i].status) + ',';
       exportData += (data[i].release) + ',';
+      exportData += (data[i].obs) + ',';
+      exportData += (data[i].linkAssistir) + ',';
       exportData += (data[i].season01) + ',';
       exportData += (data[i].season02) + ',';
       exportData += (data[i].season03) + ',';
@@ -52,22 +54,26 @@ const actions = {
         const name = pAnimes[0];
         const status = pAnimes[1];
         const release = pAnimes[2];
-        const season01 = pAnimes[3];
-        const season02 = pAnimes[4];
-        const season03 = pAnimes[5];
-        const season04 = pAnimes[6];
-        const season05 = pAnimes[7];
-        const season06 = pAnimes[8];
-        const season07 = pAnimes[9];
-        const season08 = pAnimes[10];
-        const season09 = pAnimes[11];
-        const season10 = pAnimes[12];
+        const obs = pAnimes[3];
+        const linkAssistir = pAnimes[4];
+        const season01 = pAnimes[5];
+        const season02 = pAnimes[6];
+        const season03 = pAnimes[7];
+        const season04 = pAnimes[8];
+        const season05 = pAnimes[9];
+        const season06 = pAnimes[10];
+        const season07 = pAnimes[11];
+        const season08 = pAnimes[12];
+        const season09 = pAnimes[13];
+        const season10 = pAnimes[14];
 
         const inewData = {
           id,
           name,
           status,
           release,
+          obs,
+          linkAssistir,
           season01,
           season02,
           season03,

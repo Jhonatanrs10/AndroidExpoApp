@@ -6,10 +6,12 @@ import { useEffect, useState } from 'react';
 import actions from './data';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const statusBarHeight = StatusBar.currentHeight;
 
 export function Animes({ closeWindow}) {
 
+  const [idForEdit, setIdForEdit] = useState(null)
   const [pageCadastro, setPageCadastro] = useState(false);
   const [deletar, setDelete] = useState(false);
 
@@ -18,6 +20,11 @@ export function Animes({ closeWindow}) {
   }
   function abrirPageCadastro() {
     setPageCadastro(true);
+  }
+
+  function pegarIdItem(id){
+    setIdForEdit(id)
+    console.log(idForEdit)
   }
 
   //////////////
@@ -45,9 +52,6 @@ export function Animes({ closeWindow}) {
 
       const totalHours = parseInt((totalEpisodies * 20) / 60)
 
-      let keys = []
-      keys = await AsyncStorage.getAllKeys()
-      console.log(keys)
 
       setMyDataTotalAnimes(totalAnimes)
       setMyDataTotalHours(totalHours)
@@ -86,6 +90,12 @@ export function Animes({ closeWindow}) {
   const DATA = myData
 
 
+  const AnimeView = ({item}) => {
+    return (
+      <View style={styles.containerItemList} onPress={''}><Text>{item?.name} - {item?.status}</Text></View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.window}>
@@ -98,8 +108,8 @@ export function Animes({ closeWindow}) {
 
           <FlatList
             data={DATA}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <View style={styles.containerItemList} ><Text onPress={closeWindow}>{item.name} - {item.status}</Text></View>}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={({ item }) => <AnimeView item={item} />}
           />
 
         </ScrollView>
@@ -125,7 +135,7 @@ export function Animes({ closeWindow}) {
 
 
       <Modal visible={pageCadastro} animationType="fade">
-        <Cadastro closeWindow={() => setPageCadastro(false)}/>
+        <Cadastro closeWindow={() => setPageCadastro(false)} idForEdit={idForEdit}/>
       </Modal>
       <Modal visible={deletar} animationType="fade" transparent={true}>
         <Delete closeWindow={() => setDelete(false)} />

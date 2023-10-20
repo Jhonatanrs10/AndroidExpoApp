@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons'
-import onChanged from 'react-native'
+import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
 
+export function Cadastro({ closeWindow, idForEdit }) {
 
-export function Cadastro({ closeWindow }) {
+  console.log(idForEdit)
 
+  const [titleBar, setTitleBar] = useState("New Anime (Teste)");
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Watching");
   const [release, setRelease] = useState("Monday");
+  const [obs, setObs] = useState("");
+  const [linkAssistir, setlinkAssistir] = useState("");
   const [season01, setSeason01] = useState("");
   const [season02, setSeason02] = useState("");
   const [season03, setSeason03] = useState("");
@@ -57,12 +61,16 @@ export function Cadastro({ closeWindow }) {
 
       if (name == "" || season01 == "") {
         alert("Name and Season are required");
+      } else if (name.indexOf(",") != -1 == true || name.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || linkAssistir.indexOf(";") != -1 == true || linkAssistir.indexOf(";") != -1 == true) {
+        alert("Name, Obs and Link cannot have the characters (,) and (;) ");
       } else {
         const newData = {
           id: nextId,
           name,
           status,
           release,
+          obs,
+          linkAssistir,
           season01,
           season02,
           season03,
@@ -100,7 +108,7 @@ export function Cadastro({ closeWindow }) {
     <View style={styles.container}>
       <View style={styles.window}>
         <View style={styles.bar}>
-          <Text style={styles.textBar}>New Anime</Text>
+          <Text style={styles.textBar}>{titleBar}</Text>
         </View>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -111,20 +119,22 @@ export function Cadastro({ closeWindow }) {
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeRelease}>
               <Text style={styles.center}>Release: {release}</Text>
             </TouchableOpacity>
+            <TextInput style={styles.input} placeholder="Obs" onChangeText={setObs} />
+            <TextInput style={styles.input} placeholder="Link" onChangeText={setlinkAssistir} />
             <View style={styles.seasons}>
               <View style={styles.seasons2}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={5} placeholder="Season 01" onChangeText={setSeason01} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 02" onChangeText={setSeason02} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 03" onChangeText={setSeason03} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 04" onChangeText={setSeason04} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 05" onChangeText={setSeason05} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 01" type={'custom'} options={{ mask: '99999' }} value={season01} onChangeText={setSeason01} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 02" type={'custom'} options={{ mask: '99999' }} value={season02} onChangeText={setSeason02} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 03" type={'custom'} options={{ mask: '99999' }} value={season03} onChangeText={setSeason03} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 04" type={'custom'} options={{ mask: '99999' }} value={season04} onChangeText={setSeason04} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 05" type={'custom'} options={{ mask: '99999' }} value={season05} onChangeText={setSeason05} />
               </View>
               <View style={styles.seasons2}>
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 06" onChangeText={setSeason06} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 07" onChangeText={setSeason07} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 08" onChangeText={setSeason08} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 09" onChangeText={setSeason09} />
-                <TextInput style={styles.input} keyboardType="numeric" maxLength={5} placeholder="Season 10" onChangeText={setSeason10} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 06" type={'custom'} options={{ mask: '99999' }} value={season06} onChangeText={setSeason06} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 07" type={'custom'} options={{ mask: '99999' }} value={season07} onChangeText={setSeason07} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 08" type={'custom'} options={{ mask: '99999' }} value={season08} onChangeText={setSeason08} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 09" type={'custom'} options={{ mask: '99999' }} value={season09} onChangeText={setSeason09} />
+                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 10" type={'custom'} options={{ mask: '99999' }} value={season10} onChangeText={setSeason10} />
               </View>
             </View>
           </ScrollView>
@@ -183,7 +193,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   form: {
-    margin:'10%'
+    margin: '10%'
   },
   seasons: {
     flexDirection: 'row',
