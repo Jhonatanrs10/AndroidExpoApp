@@ -1,31 +1,31 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Modal, ScrollView,RefreshControl, Button, FlatList, Item } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Modal, ScrollView, RefreshControl, Button, FlatList, Item } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 import { Cadastro } from './add';
 import { Delete } from './delete';
 import { useEffect, useState } from 'react';
 import actions from './data';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CadastroEdit } from './edit';
 
 
 const statusBarHeight = StatusBar.currentHeight;
 
-export function Animes({ closeWindow}) {
+export function Animes({ closeWindow }) {
 
   const [idForEdit, setIdForEdit] = useState(null);
   const [pageCadastro, setPageCadastro] = useState(false);
+  const [pageCadastroEdit, setPageCadastroEdit] = useState(false);
   const [deletar, setDelete] = useState(false);
 
   function abrirDelete() {
     setDelete(true);
   }
-  function abrirPageCadastro(value) {
-    if(value == null){
-      setPageCadastro(true);
-    }else{
-      setPageCadastro(true);
-      setIdForEdit(value)
-    }
-    
+  function abrirPageCadastro() {
+    setPageCadastro(true);
+  }
+  function abrirPageCadastroEdit(value) {
+    setPageCadastroEdit(true);
+    setIdForEdit(value)
   }
 
   //////////////
@@ -91,16 +91,16 @@ export function Animes({ closeWindow}) {
   const DATA = myData
 
   // /actions.deleteIdData(item?.id)
-  const AnimeView = ({item}) => {
+  const AnimeView = ({ item }) => {
     return (
-      <View style={styles.containerItemList}><Text onPress={() => abrirPageCadastro(item?.id)}>{item?.id} - {item?.name} - {item?.status}</Text></View>
+      <View style={styles.containerItemList}><Text onPress={() => abrirPageCadastroEdit(item?.id)}>{item?.id} - {item?.name} - {item?.status}</Text></View>
     );
   }
 
   return (
     <View style={styles.container}>
       <StatusBar
-        barStyle = "default"
+        barStyle="default"
       />
       <View style={styles.window}>
         <View style={styles.bar}>
@@ -108,7 +108,7 @@ export function Animes({ closeWindow}) {
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          
+
 
           <FlatList
             data={DATA}
@@ -120,7 +120,7 @@ export function Animes({ closeWindow}) {
       </View>
 
       <View style={styles.containerDock}>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => abrirPageCadastro(null)}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageCadastro}>
           <AntDesign name="plus" size={30} color="#808080" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={actions.importData}>
@@ -139,7 +139,10 @@ export function Animes({ closeWindow}) {
 
 
       <Modal visible={pageCadastro} animationType="fade">
-        <Cadastro closeWindow={() => setPageCadastro(false)} idEdit={idForEdit}/>
+        <Cadastro closeWindow={() => setPageCadastro(false)} idEdit={idForEdit} />
+      </Modal>
+      <Modal visible={pageCadastroEdit} animationType="fade">
+        <CadastroEdit closeWindow={() => setPageCadastroEdit(false)} idEdit={idForEdit} />
       </Modal>
       <Modal visible={deletar} animationType="fade" transparent={true}>
         <Delete closeWindow={() => setDelete(false)} />

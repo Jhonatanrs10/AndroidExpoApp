@@ -4,11 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
 
-export function Cadastro({ closeWindow, idEdit }) {
+export function Cadastro({ closeWindow }) {
 
-  console.log("ola" + idEdit)
-
-  const [titleBar, setTitleBar] = useState("New Anime");
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Watching");
   const [release, setRelease] = useState("Monday");
@@ -53,7 +50,9 @@ export function Cadastro({ closeWindow, idEdit }) {
     }
   }
 
+
   async function salvarNew() {
+
     const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
     const data = response ? JSON.parse(response) : [];
     var count = 0;
@@ -122,7 +121,7 @@ export function Cadastro({ closeWindow, idEdit }) {
       />
       <View style={styles.window}>
         <View style={styles.bar}>
-          <Text style={styles.textBar}>{titleBar}</Text>
+          <Text style={styles.textBar}>New Anime</Text>
         </View>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={false}>
