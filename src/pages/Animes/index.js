@@ -11,20 +11,21 @@ const statusBarHeight = StatusBar.currentHeight;
 
 export function Animes({ closeWindow}) {
 
-  const [idForEdit, setIdForEdit] = useState(null)
+  const [idForEdit, setIdForEdit] = useState(null);
   const [pageCadastro, setPageCadastro] = useState(false);
   const [deletar, setDelete] = useState(false);
 
   function abrirDelete() {
     setDelete(true);
   }
-  function abrirPageCadastro() {
-    setPageCadastro(true);
-  }
-
-  function pegarIdItem(id){
-    setIdForEdit(id)
-    console.log(idForEdit)
+  function abrirPageCadastro(value) {
+    if(value == null){
+      setPageCadastro(true);
+    }else{
+      setPageCadastro(true);
+      setIdForEdit(value)
+    }
+    
   }
 
   //////////////
@@ -89,15 +90,18 @@ export function Animes({ closeWindow}) {
   //const DATA = [{id: "TESTE 1"},{id: "TESTE 2"},{id: "TESTE 3"}]
   const DATA = myData
 
-
+  // /actions.deleteIdData(item?.id)
   const AnimeView = ({item}) => {
     return (
-      <View style={styles.containerItemList} onPress={''}><Text>{item?.name} - {item?.status}</Text></View>
+      <View style={styles.containerItemList}><Text onPress={() => abrirPageCadastro(item?.id)}>{item?.id} - {item?.name} - {item?.status}</Text></View>
     );
   }
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle = "default"
+      />
       <View style={styles.window}>
         <View style={styles.bar}>
           <Text style={styles.textBar}>Animes ( Completed {myDataTotalAnimes} & Hours {myDataTotalHours} )</Text>
@@ -116,7 +120,7 @@ export function Animes({ closeWindow}) {
       </View>
 
       <View style={styles.containerDock}>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageCadastro}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => abrirPageCadastro(null)}>
           <AntDesign name="plus" size={30} color="#808080" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={actions.importData}>
@@ -135,7 +139,7 @@ export function Animes({ closeWindow}) {
 
 
       <Modal visible={pageCadastro} animationType="fade">
-        <Cadastro closeWindow={() => setPageCadastro(false)} idForEdit={idForEdit}/>
+        <Cadastro closeWindow={() => setPageCadastro(false)} idEdit={idForEdit}/>
       </Modal>
       <Modal visible={deletar} animationType="fade" transparent={true}>
         <Delete closeWindow={() => setDelete(false)} />

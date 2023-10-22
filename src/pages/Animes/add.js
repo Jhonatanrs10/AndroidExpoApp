@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
 
-export function Cadastro({ closeWindow, idForEdit }) {
+export function Cadastro({ closeWindow, idEdit }) {
 
-  console.log(idForEdit)
+  console.log("ola" + idEdit)
 
-  const [titleBar, setTitleBar] = useState("New Anime (Teste)");
+  const [titleBar, setTitleBar] = useState("New Anime");
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Watching");
   const [release, setRelease] = useState("Monday");
@@ -56,7 +56,12 @@ export function Cadastro({ closeWindow, idForEdit }) {
   async function salvarNew() {
     const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
     const data = response ? JSON.parse(response) : [];
-    const nextId = data.length + 1
+    var count = 0;
+    for (var i = 0; i < data.length; i++) {
+      count = data[i].id
+    }
+    const nextId = count + 1
+
     try {
 
       if (name == "" || season01 == "") {
@@ -84,12 +89,18 @@ export function Cadastro({ closeWindow, idForEdit }) {
         }
 
         const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
+        //console.log(response)//string
         const previousData = response ? JSON.parse(response) : [];
+        //console.log(previousData)//json array
         const data = [...previousData, newData];
+        //console.log(newData)//new in array
+        //console.log(data)
 
-        await AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(data));
+
+        await AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(data));//json string convert array para string
 
         alert("Salvo com Sucesso.");
+        console.log("resultado ADD" + JSON.stringify(data))
 
         closeWindow();
       }
@@ -106,6 +117,9 @@ export function Cadastro({ closeWindow, idForEdit }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle="default"
+      />
       <View style={styles.window}>
         <View style={styles.bar}>
           <Text style={styles.textBar}>{titleBar}</Text>

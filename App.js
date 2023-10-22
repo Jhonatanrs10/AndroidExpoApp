@@ -7,8 +7,6 @@ import { AntDesign } from '@expo/vector-icons'
 import { Cadastro } from './src/pages/Animes/add';
 import * as SystemUI from 'expo-system-ui';
 
-const color = await SystemUI.getBackgroundColorAsync("white");
-
 const statusBarHeight = StatusBar.currentHeight;
 
 export default function App() {
@@ -21,6 +19,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle = "default"
+      />
       <View style={styles.pages}>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageAnimes}>
           <Image style={styles.animesButtonIcon} source={require('./assets/animes.png')}/>
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   container: {
     //marginTop: statusBarHeight,
     flex: 1,
-    backgroundColor: color,
+    backgroundColor: '#B0C4DE',
     padding: '15%',
     flexDirection: 'row',
   },
