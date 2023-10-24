@@ -1,11 +1,7 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { Animes } from "./src/pages/Animes/index";
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity,Modal, ScrollView, Button, FlatList, Image } from 'react-native';
-import actions from './src/pages/Animes/data';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity,Modal, Image } from 'react-native';
 import { useState } from 'react';
-import { AntDesign } from '@expo/vector-icons'
-import { Cadastro } from './src/pages/Animes/add';
-import * as SystemUI from 'expo-system-ui';
+
 
 const statusBarHeight = StatusBar.currentHeight;
 
@@ -16,19 +12,13 @@ export default function App() {
     setPageAnimes(true);
   }
 
-
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle = "default"
-      />
       <View style={styles.pages}>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageAnimes}>
           <Image style={styles.animesButtonIcon} source={require('./assets/animes.png')}/>
         </TouchableOpacity>
       </View>
-    
-      
       <View>
         <Modal visible={pageAnimes} animationType="fade">
           <Animes closeWindow={() => setPageAnimes(false)}/>

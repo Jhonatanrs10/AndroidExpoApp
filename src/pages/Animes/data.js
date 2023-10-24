@@ -98,7 +98,7 @@ const actions = {
       }
       const nextId = count + 1
 
-      var importDataTxt = 'One Piece,Watching,Sunday,1076,,,,,,,,,;Charlotte,Completed,Friday,13,,,,,,,,,;One Piece,Watching,Sunday,1076,,,,,,,,,;Charlotte,Completed,Friday,13,,,,,,,,,;One Piece,Watching,Sunday,1076,,,,,,,,,;Charlotte,Completed,Friday,13,,,,,,,,,;One Piece,Watching,Sunday,1076,,,,,,,,,;Charlotte,Completed,Friday,13,,,,,,,,,;One Piece,Watching,Sunday,1076,,,,,,,,,;Charlotte,Completed,Friday,13,,,,,,,,,;One Piece,Watching,Sunday,1076,,,,,,,,,;Charlotte,Completed,Friday,13,,,,,,,,,;';
+      var importDataTxt = 'TATE NO YUUSHA,Watching,Sunday,TOP,https://meuanime.io/epsonline/tate-no-yuusha-no-nariagari-3,24,,,,,,,,,;One Piece,Watching,Saturday,TOP,https://meuanime.io/epsonline/tate-no-yuusha-no-nariagari-3,1076,,,,,,,,,;';
       var animes = importDataTxt.split(';');
 
 
@@ -143,7 +143,7 @@ const actions = {
           season10
         }
 
-        console.log(inewData)
+        //console.log(inewData)
 
         const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
         const previousData = response ? JSON.parse(response) : [];

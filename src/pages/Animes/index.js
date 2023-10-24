@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Modal, ScrollView, RefreshControl, Button, FlatList, Item } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Modal, Image, RefreshControl, Button, FlatList, Linking } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
 import { Cadastro } from './add';
 import { Delete } from './delete';
 import { useEffect, useState } from 'react';
+import React from 'react';
 import actions from './data';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CadastroEdit } from './edit';
@@ -14,6 +15,7 @@ export function Animes({ closeWindow }) {
 
   const [idForEdit, setIdForEdit] = useState(null);
   const [pageCadastro, setPageCadastro] = useState(false);
+  const [pageCadastroAtt, setPageCadastroAtt] = useState(false);
   const [pageCadastroEdit, setPageCadastroEdit] = useState(false);
   const [deletar, setDelete] = useState(false);
 
@@ -27,6 +29,15 @@ export function Animes({ closeWindow }) {
     setPageCadastroEdit(true);
     setIdForEdit(value)
   }
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   //////////////
 
@@ -92,31 +103,39 @@ export function Animes({ closeWindow }) {
 
   // /actions.deleteIdData(item?.id)
   const AnimeView = ({ item }) => {
+
     return (
-      <View style={styles.containerItemList}><Text onPress={() => abrirPageCadastroEdit(item?.id)}>{item?.id} - {item?.name} - {item?.status}</Text></View>
+      <View style={styles.containerItemList}>
+        <Text numberOfLines={1} width={'75%'} onPress={() => abrirPageCadastroEdit(item)}>{item?.id} - {item?.name} - {item?.status}</Text>
+        <View style={styles.buttonsItemList}>
+          <TouchableOpacity activeOpacity={0.3} onPress={() => { Linking.openURL('https://myanimelist.net/search/all?q=' + item?.name) }}>
+            <AntDesign name="infocirlceo" size={12} color="#808080" />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.3} onPress={() => { if (item.linkAssistir !== ''){Linking.openURL(item.linkAssistir)}else{alert("No link")} }}>
+            <AntDesign name="play" size={12} color='#808080' />
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle="default"
-      />
       <View style={styles.window}>
         <View style={styles.bar}>
           <Text style={styles.textBar}>Animes ( Completed {myDataTotalAnimes} & Hours {myDataTotalHours} )</Text>
         </View>
+        <FlatList
+        
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-
-
-          <FlatList
-            data={DATA}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => <AnimeView item={item} />}
-          />
-
-        </ScrollView>
+          showsVerticalScrollIndicator={false}
+          data={DATA}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => <AnimeView item={item} /> }
+        />
       </View>
 
       <View style={styles.containerDock}>
@@ -139,10 +158,10 @@ export function Animes({ closeWindow }) {
 
 
       <Modal visible={pageCadastro} animationType="fade">
-        <Cadastro closeWindow={() => setPageCadastro(false)} idEdit={idForEdit} />
+        <Cadastro closeWindow={() => setPageCadastro(false)} item={idForEdit} />
       </Modal>
       <Modal visible={pageCadastroEdit} animationType="fade">
-        <CadastroEdit closeWindow={() => setPageCadastroEdit(false)} idEdit={idForEdit} />
+        <CadastroEdit closeWindow={() => setPageCadastroEdit(false)} item={idForEdit} />
       </Modal>
       <Modal visible={deletar} animationType="fade" transparent={true}>
         <Delete closeWindow={() => setDelete(false)} />
@@ -199,7 +218,9 @@ const styles = StyleSheet.create({
   },
   containerItemList: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    paddingStart: 10,
+    paddingEnd: 10,
     height: 50,
     marginTop: 10,
     marginBottom: 5,
@@ -208,6 +229,17 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#B0C4DE',
     alignItems: 'center',
+  },
+  buttonsItemList:{
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingStart: 10,
+    paddingEnd: 10,
+    borderRadius: 15,
+    height: 30,
+    width: 60,
   },
   containerDock: {
     flexDirection: 'row',

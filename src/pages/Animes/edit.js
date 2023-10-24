@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, StatusBar, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
 import actions from './data';
 
-export function CadastroEdit({ closeWindow, idEdit }) {
+const statusBarHeight = StatusBar.currentHeight;
 
-  const [name, setName] = useState("");
-  const [status, setStatus] = useState("Watching");
-  const [release, setRelease] = useState("Monday");
-  const [obs, setObs] = useState("");
-  const [linkAssistir, setlinkAssistir] = useState("");
-  const [season01, setSeason01] = useState("");
-  const [season02, setSeason02] = useState("");
-  const [season03, setSeason03] = useState("");
-  const [season04, setSeason04] = useState("");
-  const [season05, setSeason05] = useState("");
-  const [season06, setSeason06] = useState("");
-  const [season07, setSeason07] = useState("");
-  const [season08, setSeason08] = useState("");
-  const [season09, setSeason09] = useState("");
-  const [season10, setSeason10] = useState("");
+export function CadastroEdit({ closeWindow, item }) {
+
+
+  const [name, setName] = useState(item.name);
+  const [status, setStatus] = useState(item.status);
+  const [release, setRelease] = useState(item.release);
+  const [obs, setObs] = useState(item.obs);
+  const [linkAssistir, setlinkAssistir] = useState(item.linkAssistir);
+  const [season01, setSeason01] = useState(item.season01);
+  const [season02, setSeason02] = useState(item.season02);
+  const [season03, setSeason03] = useState(item.season03);
+  const [season04, setSeason04] = useState(item.season04);
+  const [season05, setSeason05] = useState(item.season05);
+  const [season06, setSeason06] = useState(item.season06);
+  const [season07, setSeason07] = useState(item.season07);
+  const [season08, setSeason08] = useState(item.season08);
+  const [season09, setSeason09] = useState(item.season09);
+  const [season10, setSeason10] = useState(item.season10);
 
   const changeStatus = () => {
     if (status == "Watching") {
@@ -50,7 +53,6 @@ export function CadastroEdit({ closeWindow, idEdit }) {
       setRelease("Monday")
     }
   }
-
 
   async function salvarNew() {
 
@@ -100,7 +102,7 @@ export function CadastroEdit({ closeWindow, idEdit }) {
         await AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(data));//json string convert array para string
 
         alert("Salvo com Sucesso.");
-        console.log("resultado ADD" + JSON.stringify(data))
+        //console.log("resultado ADD" + JSON.stringify(data))
 
         closeWindow();
       }
@@ -122,11 +124,11 @@ export function CadastroEdit({ closeWindow, idEdit }) {
       />
       <View style={styles.window}>
         <View style={styles.bar}>
-          <Text style={styles.textBar}>Edit Anime (ID:{idEdit})</Text>
+          <Text style={styles.textBar}>Edit Anime (ID:{item.id})</Text>
         </View>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <TextInput style={styles.input} placeholder="Name" onChangeText={setName} />
+            <TextInput style={styles.input} placeholder="Name" value={name} onChangeText={setName} />
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeStatus}>
               <Text style={styles.center}>Status: {status}</Text>
             </TouchableOpacity>
@@ -137,28 +139,28 @@ export function CadastroEdit({ closeWindow, idEdit }) {
             <TextInput style={styles.input} placeholder="Link" onChangeText={setlinkAssistir} />
             <View style={styles.seasons}>
               <View style={styles.seasons2}>
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 01" type={'custom'} options={{ mask: '99999' }} value={season01} onChangeText={setSeason01} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 02" type={'custom'} options={{ mask: '99999' }} value={season02} onChangeText={setSeason02} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 03" type={'custom'} options={{ mask: '99999' }} value={season03} onChangeText={setSeason03} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 04" type={'custom'} options={{ mask: '99999' }} value={season04} onChangeText={setSeason04} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 05" type={'custom'} options={{ mask: '99999' }} value={season05} onChangeText={setSeason05} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 01" type={'custom'} options={{ mask: '99999' }} value={season01} onChangeText={setSeason01} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 02" type={'custom'} options={{ mask: '99999' }} value={season02} onChangeText={setSeason02} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 03" type={'custom'} options={{ mask: '99999' }} value={season03} onChangeText={setSeason03} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 04" type={'custom'} options={{ mask: '99999' }} value={season04} onChangeText={setSeason04} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 05" type={'custom'} options={{ mask: '99999' }} value={season05} onChangeText={setSeason05} />
               </View>
               <View style={styles.seasons2}>
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 06" type={'custom'} options={{ mask: '99999' }} value={season06} onChangeText={setSeason06} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 07" type={'custom'} options={{ mask: '99999' }} value={season07} onChangeText={setSeason07} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 08" type={'custom'} options={{ mask: '99999' }} value={season08} onChangeText={setSeason08} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 09" type={'custom'} options={{ mask: '99999' }} value={season09} onChangeText={setSeason09} />
-                <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Season 10" type={'custom'} options={{ mask: '99999' }} value={season10} onChangeText={setSeason10} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 06" type={'custom'} options={{ mask: '99999' }} value={season06} onChangeText={setSeason06} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 07" type={'custom'} options={{ mask: '99999' }} value={season07} onChangeText={setSeason07} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 08" type={'custom'} options={{ mask: '99999' }} value={season08} onChangeText={setSeason08} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 09" type={'custom'} options={{ mask: '99999' }} value={season09} onChangeText={setSeason09} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 10" type={'custom'} options={{ mask: '99999' }} value={season10} onChangeText={setSeason10} />
               </View>
             </View>
           </ScrollView>
         </View>
       </View>
       <View style={styles.containerDock}>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={''}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => alert('editar em manutencao')}>
           <AntDesign name="edit" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => actions.deleteIdData(idEdit)}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => actions.deleteIdData(item.id)}>
           <AntDesign name="delete" size={30} color="#808080" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={closeWindow}>
@@ -171,6 +173,7 @@ export function CadastroEdit({ closeWindow, idEdit }) {
 }
 const styles = StyleSheet.create({
   container: {
+    //marginTop: statusBarHeight,
     flex: 1,
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 11,
     borderColor: 'black',
-    paddingBottom: 1,
+    paddingBottom: 0,
     borderWidth: 1,
     backgroundColor: '#fff'
   },
@@ -207,14 +210,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    marginBottom: 1,
+    marginBottom: 0,
   },
   form: {
-    margin: '10%'
+    flex: 1, 
   },
   seasons: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     marginStart: '10%',
     marginEnd: '10%'
   },
@@ -237,10 +240,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#B0C4DE',
     marginTop: 5,
     marginBottom: 10,
-    marginStart: 10,
-    marginEnd: 10,
+    marginStart: '10%',
+    marginEnd: '10%',
     paddingTop: 10,
     paddingBottom: 10,
+    paddingStart: 10,
+    paddingEnd: 10,
+    borderRadius: 10,
+    height: 45,
+    justifyContent: 'center'
+  },
+  input2: {
+    textAlign: 'center',
+    backgroundColor: '#B0C4DE',
+    marginTop: 5,
+    marginBottom: 10,
+    marginStart: '15%',
+    marginEnd: '15%',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingStart: 10,
+    paddingEnd: 10,
     borderRadius: 10,
   },
   container2: {
