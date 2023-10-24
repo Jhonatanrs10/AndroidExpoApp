@@ -10,24 +10,24 @@ const statusBarHeight = StatusBar.currentHeight;
 export function CadastroEdit({ closeWindow, item }) {
 
 
-  const [name, setName] = useState(item.name);
-  const [status, setStatus] = useState(item.status);
-  const [release, setRelease] = useState(item.release);
-  const [obs, setObs] = useState(item.obs);
-  const [linkAssistir, setlinkAssistir] = useState(item.linkAssistir);
-  const [season01, setSeason01] = useState(item.season01);
-  const [season02, setSeason02] = useState(item.season02);
-  const [season03, setSeason03] = useState(item.season03);
-  const [season04, setSeason04] = useState(item.season04);
-  const [season05, setSeason05] = useState(item.season05);
-  const [season06, setSeason06] = useState(item.season06);
-  const [season07, setSeason07] = useState(item.season07);
-  const [season08, setSeason08] = useState(item.season08);
-  const [season09, setSeason09] = useState(item.season09);
-  const [season10, setSeason10] = useState(item.season10);
+  const [nameEdit, setName] = useState(item.name);
+  const [statusEdit, setStatus] = useState(item.status);
+  const [releaseEdit, setRelease] = useState(item.release);
+  const [obsEdit, setObs] = useState(item.obs);
+  const [linkAssistirEdit, setlinkAssistir] = useState(item.linkAssistir);
+  const [season01Edit, setSeason01] = useState(item.season01);
+  const [season02Edit, setSeason02] = useState(item.season02);
+  const [season03Edit, setSeason03] = useState(item.season03);
+  const [season04Edit, setSeason04] = useState(item.season04);
+  const [season05Edit, setSeason05] = useState(item.season05);
+  const [season06Edit, setSeason06] = useState(item.season06);
+  const [season07Edit, setSeason07] = useState(item.season07);
+  const [season08Edit, setSeason08] = useState(item.season08);
+  const [season09Edit, setSeason09] = useState(item.season09);
+  const [season10Edit, setSeason10] = useState(item.season10);
 
   const changeStatus = () => {
-    if (status == "Watching") {
+    if (statusEdit == "Watching") {
       setStatus("Completed")
     } else {
       setStatus("Watching")
@@ -35,44 +35,63 @@ export function CadastroEdit({ closeWindow, item }) {
   }
 
   const changeRelease = () => {
-    if (release == "Monday") {
+    if (releaseEdit == "Monday") {
       setRelease("Tuesday")
-    } else if (release == "Tuesday") {
+    } else if (releaseEdit == "Tuesday") {
       setRelease("Wednesday")
-    } else if (release == "Wednesday") {
+    } else if (releaseEdit == "Wednesday") {
       setRelease("Thursday")
-    } else if (release == "Thursday") {
+    } else if (releaseEdit == "Thursday") {
       setRelease("Friday")
-    } else if (release == "Friday") {
+    } else if (releaseEdit == "Friday") {
       setRelease("Saturday")
-    } else if (release == "Saturday") {
+    } else if (releaseEdit == "Saturday") {
       setRelease("Sunday")
-    } else if (release == "Sunday") {
+    } else if (releaseEdit == "Sunday") {
       setRelease("Monday")
     } else {
       setRelease("Monday")
     }
   }
 
-  async function salvarNew() {
+  function deleteEdit(){
+    actions.deleteIdData(item.id)
+    closeWindow();
+  }
+  function addEdit(){
+    editIdData(item.id)
+    closeWindow();
+  }
 
+ 
+  async function editIdData(valueId) {
+    console.log(nameEdit)
     const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
     const data = response ? JSON.parse(response) : [];
-    var count = 0;
+    var animeAllData = [];
+
     for (var i = 0; i < data.length; i++) {
-      count = data[i].id
-    }
-    const nextId = count + 1
+      if (valueId == data[i].id) {
+        console.log(valueId)
+        const id = (data[i].id);
+        const name = (nameEdit);
+        const status = (statusEdit);
+        const release = (releaseEdit);
+        const obs = (obsEdit);
+        const linkAssistir = (linkAssistirEdit);
+        const season01 = (season01Edit);
+        const season02 = (season02Edit);
+        const season03 = (season03Edit);
+        const season04 = (season04Edit);
+        const season05 = (season05Edit);
+        const season06 = (season06Edit);
+        const season07 = (season07Edit);
+        const season08 = (season08Edit);
+        const season09 = (season09Edit);
+        const season10 = (season10Edit);
 
-    try {
-
-      if (name == "" || season01 == "") {
-        alert("Name and Season are required");
-      } else if (name.indexOf(",") != -1 == true || name.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || linkAssistir.indexOf(";") != -1 == true || linkAssistir.indexOf(";") != -1 == true) {
-        alert("Name, Obs and Link cannot have the characters (,) and (;) ");
-      } else {
-        const newData = {
-          id: nextId,
+        const animeData = {
+          id,
           name,
           status,
           release,
@@ -89,31 +108,50 @@ export function CadastroEdit({ closeWindow, item }) {
           season09,
           season10
         }
+        animeAllData.push(animeData)
+      } else {
+        const id = (data[i].id);
+        const name = (data[i].name);
+        const status = (data[i].status);
+        const release = (data[i].release);
+        const obs = (data[i].obs);
+        const linkAssistir = (data[i].linkAssistir);
+        const season01 = (data[i].season01);
+        const season02 = (data[i].season02);
+        const season03 = (data[i].season03);
+        const season04 = (data[i].season04);
+        const season05 = (data[i].season05);
+        const season06 = (data[i].season06);
+        const season07 = (data[i].season07);
+        const season08 = (data[i].season08);
+        const season09 = (data[i].season09);
+        const season10 = (data[i].season10);
 
-        const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
-        //console.log(response)//string
-        const previousData = response ? JSON.parse(response) : [];
-        //console.log(previousData)//json array
-        const data = [...previousData, newData];
-        //console.log(newData)//new in array
-        //console.log(data)
-
-
-        await AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(data));//json string convert array para string
-
-        alert("Salvo com Sucesso.");
-        //console.log("resultado ADD" + JSON.stringify(data))
-
-        closeWindow();
+        const animeData = {
+          id,
+          name,
+          status,
+          release,
+          obs,
+          linkAssistir,
+          season01,
+          season02,
+          season03,
+          season04,
+          season05,
+          season06,
+          season07,
+          season08,
+          season09,
+          season10
+        }
+        animeAllData.push(animeData)
       }
-
-
-    } catch (error) {
-
-      console.log(error);
-      alert("Não foi possível cadastrar");
-
     }
+
+    //console.log(JSON.stringify(animeAllData))
+
+    AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(animeAllData));
 
   }
 
@@ -128,39 +166,39 @@ export function CadastroEdit({ closeWindow, item }) {
         </View>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <TextInput style={styles.input} placeholder="Name" value={name} onChangeText={setName} />
+            <TextInput style={styles.input} placeholder="Name" value={nameEdit} onChangeText={setName} />
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeStatus}>
-              <Text style={styles.center}>Status: {status}</Text>
+              <Text style={styles.center}>Status: {statusEdit}</Text>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeRelease}>
-              <Text style={styles.center}>Release: {release}</Text>
+              <Text style={styles.center}>Release: {releaseEdit}</Text>
             </TouchableOpacity>
-            <TextInput style={styles.input} placeholder="Obs" onChangeText={setObs} />
-            <TextInput style={styles.input} placeholder="Link" onChangeText={setlinkAssistir} />
+            <TextInput style={styles.input} placeholder="Obs" value={obsEdit} onChangeText={setObs} />
+            <TextInput style={styles.input} placeholder="Link" value={linkAssistirEdit} onChangeText={setlinkAssistir} />
             <View style={styles.seasons}>
               <View style={styles.seasons2}>
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 01" type={'custom'} options={{ mask: '99999' }} value={season01} onChangeText={setSeason01} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 02" type={'custom'} options={{ mask: '99999' }} value={season02} onChangeText={setSeason02} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 03" type={'custom'} options={{ mask: '99999' }} value={season03} onChangeText={setSeason03} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 04" type={'custom'} options={{ mask: '99999' }} value={season04} onChangeText={setSeason04} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 05" type={'custom'} options={{ mask: '99999' }} value={season05} onChangeText={setSeason05} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 01" type={'custom'} options={{ mask: '99999' }} value={season01Edit} onChangeText={setSeason01} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 02" type={'custom'} options={{ mask: '99999' }} value={season02Edit} onChangeText={setSeason02} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 03" type={'custom'} options={{ mask: '99999' }} value={season03Edit} onChangeText={setSeason03} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 04" type={'custom'} options={{ mask: '99999' }} value={season04Edit} onChangeText={setSeason04} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 05" type={'custom'} options={{ mask: '99999' }} value={season05Edit} onChangeText={setSeason05} />
               </View>
               <View style={styles.seasons2}>
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 06" type={'custom'} options={{ mask: '99999' }} value={season06} onChangeText={setSeason06} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 07" type={'custom'} options={{ mask: '99999' }} value={season07} onChangeText={setSeason07} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 08" type={'custom'} options={{ mask: '99999' }} value={season08} onChangeText={setSeason08} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 09" type={'custom'} options={{ mask: '99999' }} value={season09} onChangeText={setSeason09} />
-                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 10" type={'custom'} options={{ mask: '99999' }} value={season10} onChangeText={setSeason10} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 06" type={'custom'} options={{ mask: '99999' }} value={season06Edit} onChangeText={setSeason06} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 07" type={'custom'} options={{ mask: '99999' }} value={season07Edit} onChangeText={setSeason07} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 08" type={'custom'} options={{ mask: '99999' }} value={season08Edit} onChangeText={setSeason08} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 09" type={'custom'} options={{ mask: '99999' }} value={season09Edit} onChangeText={setSeason09} />
+                <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 10" type={'custom'} options={{ mask: '99999' }} value={season10Edit} onChangeText={setSeason10} />
               </View>
             </View>
           </ScrollView>
         </View>
       </View>
       <View style={styles.containerDock}>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => alert('editar em manutencao')}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => addEdit()}>
           <AntDesign name="edit" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => actions.deleteIdData(item.id)}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => deleteEdit()}>
           <AntDesign name="delete" size={30} color="#808080" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={closeWindow}>
