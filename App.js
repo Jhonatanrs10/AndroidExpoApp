@@ -1,11 +1,11 @@
 import { Animes } from "./src/pages/Animes/index";
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity,Modal, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity,Modal, Image } from 'react-native';
 import { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 
-
-const statusBarHeight = StatusBar.currentHeight;
 
 export default function App() {
+
   const [pageAnimes, setPageAnimes] = useState(false);
 
   function abrirPageAnimes(){
@@ -21,9 +21,10 @@ export default function App() {
       </View>
       <View>
         <Modal visible={pageAnimes} animationType="fade">
-          <Animes closeWindow={() => setPageAnimes(false)}/>
+          <Animes closeWindow={() => setPageAnimes(false)} openWindow={() => setPageAnimes(true)}/>
         </Modal>
       </View>
+      <StatusBar style='auto'/>
     </View>
   );
  

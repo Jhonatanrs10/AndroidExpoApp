@@ -1,7 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from 'expo-file-system';
+import {ToastAndroid} from 'react-native'
 
 
 const actions = {
+  showMsg: function (msg) {
+    ToastAndroid.show(msg, ToastAndroid.SHORT);
+  },
   exportData: async function () {
     const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
     const data = response ? JSON.parse(response) : [];
@@ -14,7 +19,7 @@ const actions = {
       exportData += (data[i].status) + ',';
       exportData += (data[i].release) + ',';
       exportData += (data[i].obs) + ',';
-      exportData += (data[i].linkAssistir) + ',';
+      exportData += (data[i].linkW) + ',';
       exportData += (data[i].season01) + ',';
       exportData += (data[i].season02) + ',';
       exportData += (data[i].season03) + ',';
@@ -30,62 +35,10 @@ const actions = {
 
     console.log(exportDataTxt)
 
+    
+    FileSystem.writeAsStringAsync(FileSystem.documentDirectory + 'database.txt', exportDataTxt);
 
-    //console.log(data.length)
-    alert("Exportado no console com Sucesso.");
-
-  },
-  deleteIdData: async function (valueId) {
-    const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
-    const data = response ? JSON.parse(response) : [];
-    var animeAllData = [];
-
-    for (var i = 0; i < data.length; i++) {
-      if (valueId == data[i].id) {
-        alert("Excluido com Sucesso.");
-      } else {
-        const id = (data[i].id);
-        const name = (data[i].name);
-        const status = (data[i].status);
-        const release = (data[i].release);
-        const obs = (data[i].obs);
-        const linkAssistir = (data[i].linkAssistir);
-        const season01 = (data[i].season01);
-        const season02 = (data[i].season02);
-        const season03 = (data[i].season03);
-        const season04 = (data[i].season04);
-        const season05 = (data[i].season05);
-        const season06 = (data[i].season06);
-        const season07 = (data[i].season07);
-        const season08 = (data[i].season08);
-        const season09 = (data[i].season09);
-        const season10 = (data[i].season10);
-
-        const animeData = {
-          id,
-          name,
-          status,
-          release,
-          obs,
-          linkAssistir,
-          season01,
-          season02,
-          season03,
-          season04,
-          season05,
-          season06,
-          season07,
-          season08,
-          season09,
-          season10
-        }
-        animeAllData.push(animeData)
-      }
-    }
-
-    //console.log(JSON.stringify(animeAllData))
-
-    AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(animeAllData));
+    ToastAndroid.show('Exportado com Sucesso!!', ToastAndroid.SHORT);
 
   },
   importData: async function () {
@@ -98,21 +51,20 @@ const actions = {
       }
       const nextId = count + 1
 
-      var importDataTxt = 'TATE NO YUUSHA,Watching,Sunday,TOP,https://meuanime.io/epsonline/tate-no-yuusha-no-nariagari-3,24,,,,,,,,,;One Piece,Watching,Saturday,TOP,https://meuanime.io/epsonline/tate-no-yuusha-no-nariagari-3,1076,,,,,,,,,;';
+      //var importDataTxt = 'TATE NO YUUSHA,Watching,Sunday,TOP,https://meuanime.io/epsonline/tate-no-yuusha-no-nariagari-3,24,,,,,,,,,;One Piece,Watching,Saturday,TOP,https://meuanime.io/epsonline/tate-no-yuusha-no-nariagari-3,1076,,,,,,,,,;';
+      var importDataTxt = 'Segunda,Watching,7-Sunday,TOP,,,,,,,,,,,24;Segunda2,Watching,5-Friday,TOP,,,,,,,,,,,24;terça,Watching,2-Tuesday,TOP,,,,,,,,,,,24;';
+      
       var animes = importDataTxt.split(';');
 
-
-      
-
       for (var i = 0; i < animes.length - 1; i++) {
-        
+
         const pAnimes = animes[i].split(',');
         const id = nextId + i;
         const name = pAnimes[0];
         const status = pAnimes[1];
         const release = pAnimes[2];
         const obs = pAnimes[3];
-        const linkAssistir = pAnimes[4];
+        const linkW = pAnimes[4];
         const season01 = pAnimes[5];
         const season02 = pAnimes[6];
         const season03 = pAnimes[7];
@@ -130,7 +82,7 @@ const actions = {
           status,
           release,
           obs,
-          linkAssistir,
+          linkW,
           season01,
           season02,
           season03,
@@ -154,12 +106,14 @@ const actions = {
 
       }
 
-      alert("Importado com Sucesso.");
+     // alert("Importado com Sucesso.");
+     ToastAndroid.show('Importado com Sucesso.', ToastAndroid.SHORT);
 
     } catch (error) {
 
       console.log(error);
-      alert("Não foi possível importar");
+      //alert("Não foi possível importar");
+      ToastAndroid.show('Não foi possível importar', ToastAndroid.SHORT);
 
     }
 

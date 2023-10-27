@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Status
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
+import actions from './data';
 
 const statusBarHeight = StatusBar.currentHeight;
 
@@ -10,9 +11,9 @@ export function Cadastro({ closeWindow, refreshWindow }) {
 
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Watching");
-  const [release, setRelease] = useState("Monday");
+  const [release, setRelease] = useState("1-Monday");
   const [obs, setObs] = useState("");
-  const [linkAssistir, setlinkAssistir] = useState("");
+  const [linkW, setlinkW] = useState("");
   const [season01, setSeason01] = useState("");
   const [season02, setSeason02] = useState("");
   const [season03, setSeason03] = useState("");
@@ -33,22 +34,22 @@ export function Cadastro({ closeWindow, refreshWindow }) {
   }
 
   const changeRelease = () => {
-    if (release == "Monday") {
-      setRelease("Tuesday")
-    } else if (release == "Tuesday") {
-      setRelease("Wednesday")
-    } else if (release == "Wednesday") {
-      setRelease("Thursday")
-    } else if (release == "Thursday") {
-      setRelease("Friday")
-    } else if (release == "Friday") {
-      setRelease("Saturday")
-    } else if (release == "Saturday") {
-      setRelease("Sunday")
-    } else if (release == "Sunday") {
-      setRelease("Monday")
+    if (release == "1-Monday") {
+      setRelease("2-Tuesday")
+    } else if (release == "2-Tuesday") {
+      setRelease("3-Wednesday")
+    } else if (release == "3-Wednesday") {
+      setRelease("4-Thursday")
+    } else if (release == "4-Thursday") {
+      setRelease("5-Friday")
+    } else if (release == "5-Friday") {
+      setRelease("6-Saturday")
+    } else if (release == "6-Saturday") {
+      setRelease("7-Sunday")
+    } else if (release == "7-Sunday") {
+      setRelease("1-Monday")
     } else {
-      setRelease("Monday")
+      setRelease("1-Monday")
     }
   }
 
@@ -65,9 +66,9 @@ export function Cadastro({ closeWindow, refreshWindow }) {
 
     try {
 
-      if (name == "" || season01 == "") {
-        alert("Name and Season are required");
-      } else if (name.indexOf(",") != -1 == true || name.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || linkAssistir.indexOf(";") != -1 == true || linkAssistir.indexOf(";") != -1 == true) {
+      if (name == "") {
+        alert("Name are required");
+      } else if (name.indexOf(",") != -1 == true || name.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || linkW.indexOf(";") != -1 == true || linkW.indexOf(";") != -1 == true) {
         alert("Name, Obs and Link cannot have the characters (,) and (;) ");
       } else {
         const newData = {
@@ -76,7 +77,7 @@ export function Cadastro({ closeWindow, refreshWindow }) {
           status,
           release,
           obs,
-          linkAssistir,
+          linkW,
           season01,
           season02,
           season03,
@@ -100,7 +101,8 @@ export function Cadastro({ closeWindow, refreshWindow }) {
 
         await AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(data));//json string convert array para string
 
-        alert("Salvo com Sucesso.");
+        //alert("Salvo com Sucesso.");
+        actions.showMsg('Salvo com Sucesso.')
         //console.log("resultado ADD" + JSON.stringify(data))
 
         closeWindow();
@@ -129,10 +131,10 @@ export function Cadastro({ closeWindow, refreshWindow }) {
               <Text style={styles.center}>Status: {status}</Text>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeRelease}>
-              <Text style={styles.center}>Release: {release}</Text>
+              <Text style={styles.center}>Release: {release.substring(2)}</Text>
             </TouchableOpacity>
             <TextInput style={styles.input} placeholder="Obs" onChangeText={setObs} />
-            <TextInput style={styles.input} placeholder="Link" onChangeText={setlinkAssistir} />
+            <TextInput style={styles.input} placeholder="Link" onChangeText={setlinkW} />
             <View style={styles.seasons}>
               <View style={styles.seasons2}>
                 <TextInputMask style={styles.input2} keyboardType='numeric' placeholder="Season 01" type={'custom'} options={{ mask: '99999' }} value={season01} onChangeText={setSeason01} />
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   bar: {
-    height: 25,
+    height: 30,
     borderTopStartRadius: 10,
     borderTopEndRadius: 10,
     backgroundColor: '#B0C4DE',
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   form: {
-    flex: 1, 
+    flex: 1
   },
   seasons: {
     flexDirection: 'row',

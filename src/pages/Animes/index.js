@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Modal, Image, RefreshControl, Button, FlatList, Linking } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'
+import { StyleSheet, Text, View, StatusBar, Button, TouchableOpacity, Modal, FlatList, Linking, TextInput } from 'react-native';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons'
 import { Cadastro } from './add';
 import { Delete } from './delete';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,8 @@ import { CadastroEdit } from './edit';
 
 const statusBarHeight = StatusBar.currentHeight;
 
-export function Animes({ closeWindow }) {
+export function Animes({ closeWindow, openWindow }) {
+
 
   const [idForEdit, setIdForEdit] = useState(null);
   const [pageCadastro, setPageCadastro] = useState(false);
@@ -30,22 +31,29 @@ export function Animes({ closeWindow }) {
     setIdForEdit(value)
   }
 
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
-
-  //////////////
-
-
+  const [search, setSearch] = useState('');
+  const [searchType, setSearchType] = useState('status');
+  const [filteredData, setFilteredData] = useState([]);
   const [myData, setMyData] = useState(null);
   const [myDataTotalAnimes, setMyDataTotalAnimes] = useState(null);
   const [myDataTotalHours, setMyDataTotalHours] = useState(null);
 
+
+  const searchMode = () => {
+    if (searchType == "name") {
+      setSearchType("status")
+      setSearch('')
+    } else if (searchType == "status") {
+      setSearchType("release")
+      setSearch('')
+    } else if (searchType == "release") {
+      setSearchType("obs")
+      setSearch('')
+    } else if (searchType == "obs") {
+      setSearchType("name")
+      setSearch('')
+    }
+  }
 
   async function myAnimesData(chave) {
     try {
@@ -68,6 +76,9 @@ export function Animes({ closeWindow }) {
       setMyDataTotalAnimes(totalAnimes)
       setMyDataTotalHours(totalHours)
       setMyData(data)
+      let sortedData = [...data]
+      sortedData.sort((a, b)=>(a.release > b.release)?1:(b.release > a.release)?-1:0);
+      setFilteredData(sortedData)
 
     } catch (error) {
       console.log('ERROR: ' + { error })
@@ -79,76 +90,130 @@ export function Animes({ closeWindow }) {
     myAnimesData("@JhonatanrsAndroidExpoApp:Animes");
   }, []);
 
-  //console.log(myData)
+  const searchFilter = (text) => {
+    if (text) {
+      const dataFiltrada = filteredData.filter(
+        function (item) {
+          if (searchType == 'name') {
+            if (item.name) {
+              const itemData = item.name.toUpperCase();
+              const textData = text.toUpperCase();
+              return itemData.indexOf(textData) > -1;
+            }
+          } else if (searchType == 'status') {
+            if (item.status) {
+              const itemData = item.status.toUpperCase();
+              const textData = text.toUpperCase();
+              return itemData.indexOf(textData) > -1;
+            }
+          } else if (searchType == 'release') {
+            if (item.release) {
+              const itemData = item.release.toUpperCase();
+              const textData = text.toUpperCase();
+              return itemData.indexOf(textData) > -1;
+            }
+          } else if (searchType == 'obs') {
+            if (item.obs) {
+              const itemData = item.obs.toUpperCase();
+              const textData = text.toUpperCase();
+              return itemData.indexOf(textData) > -1;
+            }
+          }
 
+        });
+      setFilteredData(dataFiltrada);
+    } else {
+      setFilteredData(myData);
+    }
+    setSearch(text);
+  };
 
-  const [exemplo, setExemplo] = useState(null);
-
-  const Armazenar = (chave, valor) => {
-    AsyncStorage.setItem(chave, valor)
-  }
-
-  const Buscar = async (chave) => {
-    const valor = await AsyncStorage.getItem(chave);
-    setExemplo(valor)
-  }
-
-  //Armazenar('teste123','Exemplo')
-  //Buscar('teste123')
-
-
-
-  //const DATA = [{id: "TESTE 1"},{id: "TESTE 2"},{id: "TESTE 3"}]
-  const DATA = myData
-
-  // /actions.deleteIdData(item?.id)
   const AnimeView = ({ item }) => {
 
+    var atualSeason = 0;
+    if (item.season10 > 0) {
+      atualSeason = item.season10
+    } else if (item.season09 > 0) {
+      atualSeason = item.season09
+    } else if (item.season08 > 0) {
+      atualSeason = item.season08
+    } else if (item.season07 > 0) {
+      atualSeason = item.season07
+    } else if (item.season06 > 0) {
+      atualSeason = item.season06
+    } else if (item.season05 > 0) {
+      atualSeason = item.season05
+    } else if (item.season04 > 0) {
+      atualSeason = item.season04
+    } else if (item.season03 > 0) {
+      atualSeason = item.season03
+    } else if (item.season02 > 0) {
+      atualSeason = item.season02
+    } else if (item.season01 > 0) {
+      atualSeason = item.season01
+    }
+  
     return (
-      <View style={styles.containerItemList}>
-        <Text numberOfLines={1} width={'75%'} onPress={() => abrirPageCadastroEdit(item)}>{item?.id} - {item?.name} - {item?.status}</Text>
-        <View style={styles.buttonsItemList}>
-          <TouchableOpacity activeOpacity={0.3} onPress={() => { Linking.openURL('https://myanimelist.net/search/all?q=' + item?.name) }}>
-            <AntDesign name="infocirlceo" size={12} color="#808080" />
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.3} onPress={() => { if (item.linkAssistir !== ''){Linking.openURL(item.linkAssistir)}else{alert("No link")} }}>
-            <AntDesign name="play" size={12} color='#808080' />
-          </TouchableOpacity>
+      <View style={styles.containerItemList} onPress={() => abrirPageCadastroEdit(item)}>
+        <View flex={1}>
+          <Text paddingBottom={5} numberOfLines={1} width={'auto'} onPress={() => abrirPageCadastroEdit(item)}>{item?.name}</Text>
+          <Text numberOfLines={1} width={'auto'} onPress={() => abrirPageCadastroEdit(item)}>(Ep:{atualSeason}) {item?.release.substring(2)}</Text>
         </View>
+        <TouchableOpacity style={styles.buttonsItemList} activeOpacity={0.3} onPress={() => { if (item.linkW !== '') { Linking.openURL(item.linkW) } else { alert("No link") } }} onLongPress={() => { Linking.openURL('https://myanimelist.net/search/all?q=' + item?.name) }}>
+          <FontAwesome5 name="play" size={12} color='#808080' />
+        </TouchableOpacity>
       </View>
     );
   }
 
+
+  ///////////
+
+  async function savefile() {
+    let fileuri = filesystem.documentdirectory + "/text.txt";
+    await filesystem.writeasstringasync(fileuri, "hello world", { encoding: filesystem.encodingtype.utf8 });
+    alert("Tentativa de criar arquivo de texto");
+  }
+
+  ///////////
   return (
     <View style={styles.container}>
+
+
+
       <View style={styles.window}>
         <View style={styles.bar}>
           <Text style={styles.textBar}>Animes ( Completed {myDataTotalAnimes} & Hours {myDataTotalHours} )</Text>
         </View>
-        <FlatList
-        
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
 
+        <FlatList
           showsVerticalScrollIndicator={false}
-          data={DATA}
+          data={filteredData}
+          extraData={true}
+          refreshing={true}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <AnimeView item={item} /> }
+          renderItem={({ item }) => <AnimeView item={item} />}
+
         />
+        <View style={styles.search}>
+          <TouchableOpacity style={styles.searchButton} activeOpacity={0.3} onPress={searchMode}>
+            <AntDesign name="search1" size={25} color="#808080" />
+          </TouchableOpacity>
+          <TextInput paddingStart={5} numberOfLines={1} width={'83%'} value={search} placeholder={"Search by: " + searchType} onChangeText={searchFilter} />
+        </View>
       </View>
 
       <View style={styles.containerDock}>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageCadastro}>
           <AntDesign name="plus" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={actions.importData}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => { actions.importData(); closeWindow() }}>
           <AntDesign name="up" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={actions.exportData}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onLongPress={savefile} onPress={actions.exportData}>
           <AntDesign name="download" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirDelete}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onLongPress={abrirDelete}>
           <AntDesign name="delete" size={30} color="#808080" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={closeWindow}>
@@ -158,13 +223,13 @@ export function Animes({ closeWindow }) {
 
 
       <Modal visible={pageCadastro} animationType="fade">
-        <Cadastro closeWindow={() => setPageCadastro(false)} item={idForEdit} />
+        <Cadastro closeWindow={() => { setPageCadastro(false); closeWindow(); openWindow() }} item={idForEdit} />
       </Modal>
       <Modal visible={pageCadastroEdit} animationType="fade">
-        <CadastroEdit closeWindow={() => setPageCadastroEdit(false)} item={idForEdit} />
+        <CadastroEdit closeWindow={() => { setPageCadastroEdit(false); closeWindow(); openWindow() }} item={idForEdit} />
       </Modal>
       <Modal visible={deletar} animationType="fade" transparent={true}>
-        <Delete closeWindow={() => setDelete(false)} />
+        <Delete closeWindow={() => { setDelete(false); closeWindow(); openWindow() }} />
       </Modal>
 
     </View>
@@ -176,7 +241,7 @@ const styles = StyleSheet.create({
     //marginTop: statusBarHeight,
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
   },
   window: {
     flex: 1,
@@ -201,7 +266,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   bar: {
-    height: 25,
+    height: 30,
     borderTopStartRadius: 10,
     borderTopEndRadius: 10,
     backgroundColor: '#B0C4DE',
@@ -221,7 +286,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingStart: 10,
     paddingEnd: 10,
-    height: 50,
+    paddingTop: 10,
+    paddingBottom: 10,
     marginTop: 10,
     marginBottom: 5,
     marginStart: 15,
@@ -230,16 +296,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#B0C4DE',
     alignItems: 'center',
   },
-  buttonsItemList:{
+  buttonsItemList: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingStart: 10,
-    paddingEnd: 10,
-    borderRadius: 15,
+    borderRadius: 10,
+    paddingStart: 2,
     height: 30,
-    width: 60,
+    width: 45,
   },
   containerDock: {
     flexDirection: 'row',
@@ -259,5 +324,29 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     height: 40,
     width: 40,
+  },
+  search: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#B0C4DE',
+    paddingStart: 5,
+    borderBottomStartRadius: 11,
+    borderBottomEndRadius: 11,
+    borderTopColor: '#000',
+    borderTopWidth: 1,
+    height: 50,
+  },
+  searchButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    width: 40,
+    height: 40,
+    borderWidth: 2,
+    borderColor: '#B0C4DE'
+
   },
 })

@@ -1,20 +1,14 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import actions from './data';
 
 export function Delete({closeWindow}) {
 
   async function deleteAllData(){
 
     await AsyncStorage.removeItem("@JhonatanrsAndroidExpoApp:Animes");
-  
-    alert("Deleted Database.");
-
-    closeWindow();
-  }
-
-  function tapSim(action){
-    action
+    actions.showMsg('Database Deletada.')
     closeWindow();
   }
   
@@ -38,8 +32,7 @@ export function Delete({closeWindow}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: '#B0C4DE',
     justifyContent: 'center',
     textAlign: 'center',
     paddingStart: '10%',
@@ -53,7 +46,7 @@ const styles = StyleSheet.create({
   },  
   input:{  
     textAlign: 'center',
-    backgroundColor: '#B0C4DE',
+    backgroundColor: '#fff',
     marginBottom: 10,
     marginStart: '10%',
     marginEnd: '10%',
@@ -67,7 +60,7 @@ const styles = StyleSheet.create({
 },
   buttonStyle:{
     padding:5,
-    backgroundColor: '#C0C0C0',
+    backgroundColor: '#fff',
     borderRadius: 10,
 },
   buttonText:{
