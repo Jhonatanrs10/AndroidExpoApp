@@ -7,6 +7,7 @@ import React from 'react';
 import actions from './data';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CadastroEdit } from './edit';
+import { ImportAnime } from './ImportAnime';
 
 
 const statusBarHeight = StatusBar.currentHeight;
@@ -16,12 +17,16 @@ export function Animes({ closeWindow, openWindow }) {
 
   const [idForEdit, setIdForEdit] = useState(null);
   const [pageCadastro, setPageCadastro] = useState(false);
-  const [pageCadastroAtt, setPageCadastroAtt] = useState(false);
   const [pageCadastroEdit, setPageCadastroEdit] = useState(false);
   const [deletar, setDelete] = useState(false);
+  const [importAnimes, setImportAnimes] = useState(false);
 
   function abrirDelete() {
     setDelete(true);
+  }
+
+  function abrirImportAnimes() {
+    setImportAnimes(true);
   }
   function abrirPageCadastro() {
     setPageCadastro(true);
@@ -35,23 +40,24 @@ export function Animes({ closeWindow, openWindow }) {
   const [searchType, setSearchType] = useState('status');
   const [filteredData, setFilteredData] = useState([]);
   const [myData, setMyData] = useState(null);
-  const [myDataTotalAnimes, setMyDataTotalAnimes] = useState(null);
+  const [myDataTotalAnimesC, setMyDataTotalAnimesC] = useState(null);
+  const [myDataTotalAnimesW, setMyDataTotalAnimesW] = useState(null);
   const [myDataTotalHours, setMyDataTotalHours] = useState(null);
 
 
   const searchMode = () => {
-    if (searchType == "name") {
+    if (searchType == "name") { 
+      setSearch('')
       setSearchType("status")
-      setSearch('')
     } else if (searchType == "status") {
+      setSearch('')
       setSearchType("release")
-      setSearch('')
     } else if (searchType == "release") {
+      setSearch('')
       setSearchType("obs")
-      setSearch('')
     } else if (searchType == "obs") {
-      setSearchType("name")
       setSearch('')
+      setSearchType("name")
     }
   }
 
@@ -59,13 +65,16 @@ export function Animes({ closeWindow, openWindow }) {
     try {
       const response = await AsyncStorage.getItem(chave);
       const data = response ? JSON.parse(response) : [];
-      var totalAnimes = 0;
+      var totalAnimesC = 0;
+      var totalAnimesW = 0;
       var totalEpisodies = 0;
       var totalAnimesName = [];
       for (var i = 0; i < data.length; i++) {
         totalAnimesName.push(data[i].name)
         if (data[i].status == "Completed") {
-          totalAnimes += 1;
+          totalAnimesC += 1;
+        } else if(data[i].status == "Watching"){
+          totalAnimesW += 1;
         }
         totalEpisodies += Number(data[i].season01) + Number(data[i].season02) + Number(data[i].season03) + Number(data[i].season04) + Number(data[i].season05) + Number(data[i].season06) + Number(data[i].season07) + Number(data[i].season08) + Number(data[i].season09) + Number(data[i].season10)
       }
@@ -73,11 +82,13 @@ export function Animes({ closeWindow, openWindow }) {
       const totalHours = parseInt((totalEpisodies * 20) / 60)
 
 
-      setMyDataTotalAnimes(totalAnimes)
+      setMyDataTotalAnimesC(totalAnimesC)
+      setMyDataTotalAnimesW(totalAnimesW)
       setMyDataTotalHours(totalHours)
-      setMyData(data)
+      //setMyData(data)
       let sortedData = [...data]
       sortedData.sort((a, b)=>(a.release > b.release)?1:(b.release > a.release)?-1:0);
+      setMyData(sortedData)
       setFilteredData(sortedData)
 
     } catch (error) {
@@ -157,9 +168,9 @@ export function Animes({ closeWindow, openWindow }) {
       <View style={styles.containerItemList} onPress={() => abrirPageCadastroEdit(item)}>
         <View flex={1}>
           <Text paddingBottom={5} numberOfLines={1} width={'auto'} onPress={() => abrirPageCadastroEdit(item)}>{item?.name}</Text>
-          <Text numberOfLines={1} width={'auto'} onPress={() => abrirPageCadastroEdit(item)}>(Ep:{atualSeason}) {item?.release.substring(2)}</Text>
+          <Text numberOfLines={1} width={'auto'} onPress={() => abrirPageCadastroEdit(item)}>{item?.status} (Ep:{atualSeason}) {item?.release.substring(2)}</Text>
         </View>
-        <TouchableOpacity style={styles.buttonsItemList} activeOpacity={0.3} onPress={() => { if (item.linkW !== '') { Linking.openURL(item.linkW) } else { alert("No link") } }} onLongPress={() => { Linking.openURL('https://myanimelist.net/search/all?q=' + item?.name) }}>
+        <TouchableOpacity style={styles.buttonsItemList} activeOpacity={0.3} onPress={() => { if (item.linkW !== '') { Linking.openURL(item.linkW) } else { actions.showMsg("No link") } }} onLongPress={() => { Linking.openURL('https://myanimelist.net/search/all?q=' + item?.name) }}>
           <FontAwesome5 name="play" size={12} color='#808080' />
         </TouchableOpacity>
       </View>
@@ -183,13 +194,13 @@ export function Animes({ closeWindow, openWindow }) {
 
       <View style={styles.window}>
         <View style={styles.bar}>
-          <Text style={styles.textBar}>Animes ( Completed {myDataTotalAnimes} & Hours {myDataTotalHours} )</Text>
+          <Text style={styles.textBar}>ANIMES</Text>
+          <Text style={styles.textBar}>( Watching {myDataTotalAnimesW} & Completed {myDataTotalAnimesC} & Hours {myDataTotalHours} )</Text>
         </View>
 
         <FlatList
           showsVerticalScrollIndicator={false}
           data={filteredData}
-          extraData={true}
           refreshing={true}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <AnimeView item={item} />}
@@ -199,7 +210,7 @@ export function Animes({ closeWindow, openWindow }) {
           <TouchableOpacity style={styles.searchButton} activeOpacity={0.3} onPress={searchMode}>
             <AntDesign name="search1" size={25} color="#808080" />
           </TouchableOpacity>
-          <TextInput paddingStart={5} numberOfLines={1} width={'83%'} value={search} placeholder={"Search by: " + searchType} onChangeText={searchFilter} />
+          <TextInput paddingStart={5} numberOfLines={1} width={'83%'} value={search} placeholder={"Search by: " + searchType} onChangeText={searchFilter}/>
         </View>
       </View>
 
@@ -207,10 +218,10 @@ export function Animes({ closeWindow, openWindow }) {
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageCadastro}>
           <AntDesign name="plus" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => { actions.importData(); closeWindow() }}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirImportAnimes}>
           <AntDesign name="up" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onLongPress={savefile} onPress={actions.exportData}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={actions.exportData}>
           <AntDesign name="download" size={30} color="#808080" />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onLongPress={abrirDelete}>
@@ -231,6 +242,9 @@ export function Animes({ closeWindow, openWindow }) {
       <Modal visible={deletar} animationType="fade" transparent={true}>
         <Delete closeWindow={() => { setDelete(false); closeWindow(); openWindow() }} />
       </Modal>
+      <Modal visible={importAnimes} animationType="fade" transparent={true}>
+        <ImportAnime closeWindow={() => { setImportAnimes(false); closeWindow(); openWindow() }} />
+      </Modal>
 
     </View>
   )
@@ -241,7 +255,7 @@ const styles = StyleSheet.create({
     //marginTop: statusBarHeight,
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: '#fff',
+    //backgroundColor: '#000',
   },
   window: {
     flex: 1,
@@ -266,11 +280,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   bar: {
-    height: 30,
+    height: 50,
     borderTopStartRadius: 10,
     borderTopEndRadius: 10,
     backgroundColor: '#B0C4DE',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'black',
@@ -331,8 +345,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#B0C4DE',
     paddingStart: 5,
-    borderBottomStartRadius: 11,
-    borderBottomEndRadius: 11,
+    borderBottomStartRadius: 10 ,
+    borderBottomEndRadius: 10,
     borderTopColor: '#000',
     borderTopWidth: 1,
     height: 50,
@@ -341,7 +355,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    borderRadius: 10,
+    borderRadius: 11,
     backgroundColor: '#fff',
     width: 40,
     height: 40,

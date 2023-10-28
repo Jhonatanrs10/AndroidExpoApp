@@ -57,7 +57,7 @@ export function CadastroEdit({ closeWindow, item }) {
     Alert.alert('Delete', 'Are you sure about this choice?', [
       { text: "Yes,I'm sure!", onPress: () => deleteIdData(item.id) },
       { text: 'No', style: 'cancel', },]);
-    
+
   }
   function addEdit() {
     editIdData(item.id)
@@ -127,90 +127,96 @@ export function CadastroEdit({ closeWindow, item }) {
     const data = response ? JSON.parse(response) : [];
     var animeAllData = [];
 
-    for (var i = 0; i < data.length; i++) {
-      if (valueId == data[i].id) {
-        //console.log(valueId)
-        const id = (data[i].id);
-        const name = (nameEdit);
-        const status = (statusEdit);
-        const release = (releaseEdit);
-        const obs = (obsEdit);
-        const linkW = (linkWEdit);
-        const season01 = (season01Edit);
-        const season02 = (season02Edit);
-        const season03 = (season03Edit);
-        const season04 = (season04Edit);
-        const season05 = (season05Edit);
-        const season06 = (season06Edit);
-        const season07 = (season07Edit);
-        const season08 = (season08Edit);
-        const season09 = (season09Edit);
-        const season10 = (season10Edit);
+    if (nameEdit == "") {
+      alert("Name are required");
+    } else if (nameEdit.indexOf("[") != -1 == true || nameEdit.indexOf("]") != -1 == true || obsEdit.indexOf("[") != -1 == true || obsEdit.indexOf("]") != -1 == true || linkWEdit.indexOf("[") != -1 == true || linkWEdit.indexOf("]") != -1 == true) {
+      alert("Name, Obs and Link cannot have the characters (,) and (;) ");
+    } else {
+      for (var i = 0; i < data.length; i++) {
+        if (valueId == data[i].id) {
+          //console.log(valueId)
+          const id = (data[i].id);
+          const name = (nameEdit);
+          const status = (statusEdit);
+          const release = (releaseEdit);
+          const obs = (obsEdit);
+          const linkW = (linkWEdit);
+          const season01 = (season01Edit);
+          const season02 = (season02Edit);
+          const season03 = (season03Edit);
+          const season04 = (season04Edit);
+          const season05 = (season05Edit);
+          const season06 = (season06Edit);
+          const season07 = (season07Edit);
+          const season08 = (season08Edit);
+          const season09 = (season09Edit);
+          const season10 = (season10Edit);
 
-        const animeData = {
-          id,
-          name,
-          status,
-          release,
-          obs,
-          linkW,
-          season01,
-          season02,
-          season03,
-          season04,
-          season05,
-          season06,
-          season07,
-          season08,
-          season09,
-          season10
-        }
-        animeAllData.push(animeData)
-      } else {
-        const id = (data[i].id);
-        const name = (data[i].name);
-        const status = (data[i].status);
-        const release = (data[i].release);
-        const obs = (data[i].obs);
-        const linkW = (data[i].linkW);
-        const season01 = (data[i].season01);
-        const season02 = (data[i].season02);
-        const season03 = (data[i].season03);
-        const season04 = (data[i].season04);
-        const season05 = (data[i].season05);
-        const season06 = (data[i].season06);
-        const season07 = (data[i].season07);
-        const season08 = (data[i].season08);
-        const season09 = (data[i].season09);
-        const season10 = (data[i].season10);
+          const animeData = {
+            id,
+            name,
+            status,
+            release,
+            obs,
+            linkW,
+            season01,
+            season02,
+            season03,
+            season04,
+            season05,
+            season06,
+            season07,
+            season08,
+            season09,
+            season10
+          }
+          animeAllData.push(animeData)
+        } else {
+          const id = (data[i].id);
+          const name = (data[i].name);
+          const status = (data[i].status);
+          const release = (data[i].release);
+          const obs = (data[i].obs);
+          const linkW = (data[i].linkW);
+          const season01 = (data[i].season01);
+          const season02 = (data[i].season02);
+          const season03 = (data[i].season03);
+          const season04 = (data[i].season04);
+          const season05 = (data[i].season05);
+          const season06 = (data[i].season06);
+          const season07 = (data[i].season07);
+          const season08 = (data[i].season08);
+          const season09 = (data[i].season09);
+          const season10 = (data[i].season10);
 
-        const animeData = {
-          id,
-          name,
-          status,
-          release,
-          obs,
-          linkW,
-          season01,
-          season02,
-          season03,
-          season04,
-          season05,
-          season06,
-          season07,
-          season08,
-          season09,
-          season10
+          const animeData = {
+            id,
+            name,
+            status,
+            release,
+            obs,
+            linkW,
+            season01,
+            season02,
+            season03,
+            season04,
+            season05,
+            season06,
+            season07,
+            season08,
+            season09,
+            season10
+          }
+          animeAllData.push(animeData)
         }
-        animeAllData.push(animeData)
       }
+
+      //console.log(JSON.stringify(animeAllData))
+
+      AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(animeAllData));
+
+      closeWindow();
     }
-
-    //console.log(JSON.stringify(animeAllData))
-
-    AsyncStorage.setItem("@JhonatanrsAndroidExpoApp:Animes", JSON.stringify(animeAllData));
-
-    closeWindow();
 
   }
 
@@ -225,7 +231,7 @@ export function CadastroEdit({ closeWindow, item }) {
         </View>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <TextInput style={styles.input} placeholder="Name" value={nameEdit} onChangeText={setName} />
+            <TextInput style={styles.input} marginTop={15} placeholder="Name" value={nameEdit} onChangeText={setName} />
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeStatus}>
               <Text style={styles.center}>Status: {statusEdit}</Text>
             </TouchableOpacity>

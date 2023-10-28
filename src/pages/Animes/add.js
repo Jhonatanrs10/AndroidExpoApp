@@ -68,8 +68,8 @@ export function Cadastro({ closeWindow, refreshWindow }) {
 
       if (name == "") {
         alert("Name are required");
-      } else if (name.indexOf(",") != -1 == true || name.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || obs.indexOf(";") != -1 == true || linkW.indexOf(";") != -1 == true || linkW.indexOf(";") != -1 == true) {
-        alert("Name, Obs and Link cannot have the characters (,) and (;) ");
+      } else if (name.indexOf("[") != -1 == true || name.indexOf("]") != -1 == true || obs.indexOf("[") != -1 == true || obs.indexOf("]") != -1 == true || linkW.indexOf("[") != -1 == true || linkW.indexOf("]") != -1 == true) {
+        alert("Name, Obs and Link cannot have the characters ([) and (]) ");
       } else {
         const newData = {
           id: nextId,
@@ -126,7 +126,7 @@ export function Cadastro({ closeWindow, refreshWindow }) {
         </View>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <TextInput style={styles.input} placeholder="Name" onChangeText={setName} />
+            <TextInput style={styles.input} marginTop={15} placeholder="Name" onChangeText={setName} />
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeStatus}>
               <Text style={styles.center}>Status: {status}</Text>
             </TouchableOpacity>

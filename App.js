@@ -1,22 +1,27 @@
 import { Animes } from "./src/pages/Animes/index";
-import { StyleSheet, Text, View, TouchableOpacity,Modal, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Modal, Image } from 'react-native';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import actions from "./src/pages/Animes/data";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default function App() {
 
   const [pageAnimes, setPageAnimes] = useState(false);
 
-  function abrirPageAnimes(){
+  function abrirPageAnimes() {
     setPageAnimes(true);
   }
+
+  //AsyncStorage.removeItem("@JhonatanrsAndroidExpoApp:Animes");
 
   return (
     <View style={styles.container}>
       <View style={styles.pages}>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirPageAnimes}>
-          <Image style={styles.animesButtonIcon} source={require('./assets/animes.png')}/>
+          <Image style={styles.animesButtonIcon} source={require('./assets/animes.png')} />
         </TouchableOpacity>
       </View>
       <View>
@@ -24,10 +29,10 @@ export default function App() {
           <Animes closeWindow={() => setPageAnimes(false)} openWindow={() => setPageAnimes(true)}/>
         </Modal>
       </View>
-      <StatusBar style='auto'/>
+      <StatusBar style='auto' />
     </View>
   );
- 
+
 }
 
 const styles = StyleSheet.create({
@@ -38,20 +43,20 @@ const styles = StyleSheet.create({
     padding: '15%',
     flexDirection: 'row',
   },
-  pages:{
+  pages: {
     flex: 1,
     flexDirection: 'column-reverse',
     justifyContent: 'space-around',
     alignItems: "center",
     alignContent: 'center',
   },
-  animesButtonIcon:{
+  animesButtonIcon: {
     padding: 0,
     margin: 0,
     height: 40,
     width: 40,
   },
-  buttonsDock:{
+  buttonsDock: {
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: "center",
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
   },
-  contentText:{
+  contentText: {
     marginTop: 1,
     fontSize: 9,
     marginStart: 'auto',
