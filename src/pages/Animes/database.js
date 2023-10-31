@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, Alert, Share } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
-import styles from '../../styles/animeStyles'
+import styles from '../../styles/styles'
 
 ///DATABASE KEYS///
-export const JhonatanrsAppAnimesDatabase = "@JhonatanrsAndroidExpoApp:Animes"
+export const JhonatanrsAppDatabase = "@JhonatanrsAndroidExpoApp:Animes"
 ///////////////////
 
-export function AnimeDatabase({ closeWindow }) {
+export function Database({ closeWindow }) {
 
   const [dataForImport, setDataForImport] = useState(null);
 
   function abrirDelete() {
-    Alert.alert('DeleteAllAnimeData', 'Are you sure about this choice?', [
+    Alert.alert('Delete database ('+JhonatanrsAppDatabase.substring(26)+')', 'Are you sure about this choice?', [
       { text: "Yes,I'm sure!", onPress: () => deleteAllData() },
       { text: 'No', style: 'cancel', },]);
   }
 
   async function deleteAllData() {
 
-    await AsyncStorage.removeItem(JhonatanrsAppAnimesDatabase);
-    ToastAndroid.show('Database Deletada.', ToastAndroid.SHORT);
+    await AsyncStorage.removeItem(JhonatanrsAppDatabase);
+    ToastAndroid.show('Database ('+JhonatanrsAppDatabase.substring(26)+') deleted.', ToastAndroid.SHORT);
     closeWindow();
   }
 
   async function importData() {
     try {
-      const response = await AsyncStorage.getItem(JhonatanrsAppAnimesDatabase);
+      const response = await AsyncStorage.getItem(JhonatanrsAppDatabase);
       const data = response ? JSON.parse(response) : [];
       var count = 0;
       for (var i = 0; i < data.length; i++) {
@@ -37,7 +37,7 @@ export function AnimeDatabase({ closeWindow }) {
       const nextId = count + 1
 
       var importDataTxt = dataForImport
-
+  
       var animes = importDataTxt.split(']');
 
       for (var i = 0; i < animes.length - 1; i++) {
@@ -82,21 +82,20 @@ export function AnimeDatabase({ closeWindow }) {
         if (pAnimes[14] == undefined) {
           ToastAndroid.show('ERRO on import (ID:' + id + ')', ToastAndroid.LONG);
         } else {
-          const response = await AsyncStorage.getItem(JhonatanrsAppAnimesDatabase);
+          const response = await AsyncStorage.getItem(JhonatanrsAppDatabase);
           const previousData = response ? JSON.parse(response) : [];
           const idata = [...previousData, inewData];
-          await AsyncStorage.setItem(JhonatanrsAppAnimesDatabase, JSON.stringify(idata));
-          
+          await AsyncStorage.setItem(JhonatanrsAppDatabase, JSON.stringify(idata));
+          ToastAndroid.show('Imported.', ToastAndroid.SHORT);          
         }
 
       }
 
-      ToastAndroid.show('Importado.', ToastAndroid.SHORT);
-
+     
     } catch (error) {
 
       console.log(error);
-      ToastAndroid.show('Não foi possível importar', ToastAndroid.SHORT);
+      ToastAndroid.show('Unable to import.', ToastAndroid.SHORT);
     }
 
     closeWindow()
@@ -104,7 +103,7 @@ export function AnimeDatabase({ closeWindow }) {
   }
 
   async function exportData() {
-    const response = await AsyncStorage.getItem("@JhonatanrsAndroidExpoApp:Animes");
+    const response = await AsyncStorage.getItem(JhonatanrsAppDatabase);
     const data = response ? JSON.parse(response) : [];
     var exportDataTxt = '';
 
@@ -150,26 +149,26 @@ export function AnimeDatabase({ closeWindow }) {
 
   return (
 
-    <View style={styles.containerAnimes}>
-      <View style={styles.windowAnimes}>
-        <View style={styles.barAnimesThin}>
-          <Text style={styles.textBarAnimes}>Anime Database</Text>
+    <View style={styles.containerIndex}>
+      <View style={styles.window}>
+        <View style={styles.barThin}>
+          <Text style={styles.textBar}>Anime Database</Text>
         </View>
-        <View style={styles.formAnimes}>
+        <View style={styles.form}>
           <TextInput multiline={true} placeholder={'Insert data for import\n\nname[status[release[obs[linkW\n[season01[season02[season03[season04[season05\n[season06[season07[season08[season09[season10]'} maxLength={99999999} onChangeText={setDataForImport}></TextInput>
         </View>
       </View>
-      <View style={styles.containerDockAnimes}>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDockAnimes} onPress={importData}>
+      <View style={styles.containerDock}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={importData}>
           <MaterialCommunityIcons name="database-import-outline" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDockAnimes} onPress={exportData}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={exportData}>
           <MaterialIcons name="add-to-drive" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDockAnimes} onLongPress={abrirDelete}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onLongPress={abrirDelete}>
           <AntDesign name="delete" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDockAnimes} onPress={closeWindow}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={closeWindow}>
           <AntDesign name="back" size={30} color="#808080" />
         </TouchableOpacity>
       </View>

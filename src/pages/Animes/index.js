@@ -2,23 +2,22 @@ import { Text, View, TouchableOpacity, ToastAndroid, Modal, FlatList, Linking, T
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { JhonatanrsAppAnimesDatabase, AnimeDatabase } from './animeDatabase';
-import styles from '../../styles/animeStyles'
-import { AnimeManage } from './animeManage';
-
+import { JhonatanrsAppDatabase, Database } from './database';
+import styles from '../../styles/styles'
+import { Manage } from './manage';
 
 export function Anime({ closeWindow, openWindow }) {
 
   const [data, setData] = useState(null);
-  const [pageAnimeManage, setPageAnimeManage] = useState(false);
-  const [animeDatabase, setAnimeDatabase] = useState(false);
+  const [pageManage, setPageManage] = useState(false);
+  const [database, setDatabase] = useState(false);
 
-  function abrirAnimeDatabase() {
-    setAnimeDatabase(true);
+  function abrirDatabase() {
+    setDatabase(true);
   }
 
-  function abrirPageAnimeManage(value) {
-    setPageAnimeManage(true);
+  function abrirPageManage(value) {
+    setPageManage(true);
     setData(value)
   }
 
@@ -81,7 +80,7 @@ export function Anime({ closeWindow, openWindow }) {
   }
 
   useEffect(() => {
-    myAnimesData(JhonatanrsAppAnimesDatabase);
+    myAnimesData(JhonatanrsAppDatabase);
   }, []);
 
   const searchFilter = (text) => {
@@ -154,12 +153,12 @@ export function Anime({ closeWindow, openWindow }) {
     }
 
     return (
-      <View style={styles.containerItemListAnimes} onPress={() => abrirPageAnimeManage(item)}>
+      <View style={styles.containerItemList} onPress={() => abrirPageManage(item)}>
         <View flex={1}>
-          <Text paddingBottom={5} numberOfLines={1} width={'auto'} onPress={() => abrirPageAnimeManage(item)}>{item?.name}</Text>
-          <Text numberOfLines={1} width={'auto'} onPress={() => abrirPageAnimeManage(item)}>{item?.release.substring(2)} (Ep:{atualSeason}) {item?.status}</Text>
+          <Text paddingBottom={5} numberOfLines={1} width={'auto'} onPress={() => abrirPageManage(item)}>{item?.name}</Text>
+          <Text numberOfLines={1} width={'auto'} onPress={() => abrirPageManage(item)}>{item?.release.substring(2)} (Ep:{atualSeason}) {item?.status}</Text>
         </View>
-        <TouchableOpacity style={styles.buttonsItemListAnimes} activeOpacity={0.3} onPress={() => { if (item.linkW !== '') { Linking.openURL(item.linkW) } else { ToastAndroid.show('No link', ToastAndroid.SHORT); } }} onLongPress={() => { Linking.openURL('https://myanimelist.net/search/all?q=' + item?.name) }}>
+        <TouchableOpacity style={styles.buttonsItemList} activeOpacity={0.3} onPress={() => { if (item.linkW.indexOf("https://") != -1 == true || item.linkW.indexOf("http://") != -1 == true) { Linking.openURL(item.linkW) } else { ToastAndroid.show('No link (https://) is a requirement', ToastAndroid.SHORT); } }} onLongPress={() => { Linking.openURL('https://myanimelist.net/search/all?q=' + item?.name) }}>
           <FontAwesome5 name="play" size={12} color='#808080' />
         </TouchableOpacity>
       </View> 
@@ -168,11 +167,11 @@ export function Anime({ closeWindow, openWindow }) {
 
 
   return (
-    <View style={styles.containerAnimes}>
-      <View style={styles.windowAnimes}>
-        <View style={styles.barAnimes}>
-          <Text style={styles.textBarAnimes}>ANIMES</Text>
-          <Text style={styles.textBarAnimes} onPress={() => {setMyData(myData)}}>( Watching {myDataTotalAnimesW} & Completed {myDataTotalAnimesC} & Hours {myDataTotalHours} )</Text>
+    <View style={styles.containerIndex}>
+      <View style={styles.window}>
+        <View style={styles.bar}>
+          <Text style={styles.textBar}>ANIMES</Text>
+          <Text style={styles.textBar}>( Watching {myDataTotalAnimesW} & Completed {myDataTotalAnimesC} & Hours {myDataTotalHours} )</Text>
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -181,30 +180,30 @@ export function Anime({ closeWindow, openWindow }) {
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <AnimeView item={item} />}
         />
-        <View style={styles.searchAnimes}>
-          <TouchableOpacity style={styles.searchButtonAnimes} activeOpacity={0.3} onPress={searchMode}>
+        <View style={styles.search}>
+          <TouchableOpacity style={styles.searchButton} activeOpacity={0.3} onPress={searchMode}>
             <AntDesign name="search1" size={25} color="#808080" />
           </TouchableOpacity>
           <TextInput paddingStart={5} numberOfLines={1} width={'83%'} value={search} placeholder={"Search by: " + searchType} onChangeText={searchFilter} />
         </View>
       </View>
 
-      <View style={styles.containerDockAnimes}>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDockAnimes} onPress={() => abrirPageAnimeManage('empty')}>
+      <View style={styles.containerDock}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => abrirPageManage('empty')}>
           <AntDesign name="plus" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDockAnimes} onLongPress={abrirAnimeDatabase}>
-          <MaterialCommunityIcons name="database-cog-outline" size={30} color="#808080" />
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={abrirDatabase}>
+          <MaterialCommunityIcons name="database" size={30} color="#808080" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDockAnimes} onPress={closeWindow}>
+        <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={closeWindow}>
           <AntDesign name="close" size={30} color="#808080" />
         </TouchableOpacity>
       </View>
-      <Modal visible={pageAnimeManage} animationType="fade">
-        <AnimeManage closeWindow={() => { setPageAnimeManage(false); closeWindow(); openWindow() }} item={data} />
+      <Modal visible={pageManage} animationType="fade">
+        <Manage closeWindow={() => { setPageManage(false); closeWindow(); openWindow() }} item={data} />
       </Modal>
-      <Modal visible={animeDatabase} animationType="fade" transparent={true}>
-        <AnimeDatabase closeWindow={() => { setAnimeDatabase(false); closeWindow(); openWindow() }} />
+      <Modal visible={database} animationType="fade" transparent={true}>
+        <Database closeWindow={() => { setDatabase(false); closeWindow(); openWindow() }} />
       </Modal>
     </View>
   )

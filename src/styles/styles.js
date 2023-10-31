@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+
 export default StyleSheet.create({
     //APP
     containerApp: {
@@ -33,12 +34,12 @@ export default StyleSheet.create({
       borderWidth: 1,
     },
     //INDEX
-    containerAnimes: {
+    containerIndex: {
         flex: 1,
         backgroundColor: '#fff',
         justifyContent: 'flex-end',
       },
-      windowAnimes: {
+      window: {
         flex: 1,
         margin: 15,
         borderRadius: 11,
@@ -47,7 +48,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         backgroundColor: '#fff'
       },
-      barAnimes: {
+      bar: {
         height: 50,
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
@@ -59,10 +60,14 @@ export default StyleSheet.create({
         borderBottomWidth: 1,
         marginBottom: 0,
       },
-      textBarAnimes: {
-        fontWeight: "bold"
+      textBar: {
+        fontWeight: "bold",
       },
-      searchAnimes: {
+      textBar20: {
+        fontWeight: "bold",
+        fontSize: 20,
+      },
+      search: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -74,7 +79,7 @@ export default StyleSheet.create({
         borderTopWidth: 1,
         height: 50,
       },
-      searchButtonAnimes: {
+      searchButton: {
         justifyContent: 'center',
         alignItems: 'center',
         alignContent: 'center',
@@ -85,7 +90,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         borderColor: '#B0C4DE'
       },
-      containerDockAnimes: {
+      containerDock: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         height: 70,
@@ -96,7 +101,7 @@ export default StyleSheet.create({
         backgroundColor: '#B0C4DE',
         alignItems: 'center',
       },
-      buttonsDockAnimes: {
+      buttonsDock: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
@@ -104,7 +109,7 @@ export default StyleSheet.create({
         height: 45,
         width: 45,
       },
-      containerItemListAnimes: {
+      containerItemList: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingStart: 10,
@@ -119,7 +124,7 @@ export default StyleSheet.create({
         backgroundColor: '#B0C4DE',
         alignItems: 'center',
       },
-      buttonsItemListAnimes: {
+      buttonsItemList: {
         flexDirection: 'row',
         backgroundColor: '#fff',
         justifyContent: 'center',
@@ -129,8 +134,17 @@ export default StyleSheet.create({
         height: 30,
         width: 45,
       },
+      buttonsItemListIntegrated: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        height: '100%',
+        width: 30,
+      },
       //ADD
-      barAnimesThin: {
+      barThin: {
         height: 30,
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
@@ -142,16 +156,16 @@ export default StyleSheet.create({
         borderBottomWidth: 1,
         marginBottom: 0,
       },
-      formAnimes: {
+      form: {
         flex: 1
       },
       textAlignCenter: {
         textAlign: 'center'
       },
-      inputAnimes: {
+      input: {
         textAlign: 'center',
         backgroundColor: '#B0C4DE',
-        marginTop: 5,
+        marginTop: 10,
         marginBottom: 10,
         marginStart: '10%',
         marginEnd: '10%',
@@ -161,6 +175,39 @@ export default StyleSheet.create({
         paddingEnd: 10,
         borderRadius: 10,
         height: 45,
-        justifyContent: 'center'
-      }
+        justifyContent: 'space-around'
+      },
+      inputNumber: {
+        justifyContent: 'space-between',
+        flexDirection:'row',
+        textAlign: 'center',
+        backgroundColor: '#B0C4DE',
+        marginTop: 10,
+        marginBottom: 10,
+        marginStart: '10%',
+        marginEnd: '10%',
+        borderRadius: 10,
+        height: 45,
+      },
+      inputNumberText: {
+        flex:1,
+        justifyContent: 'center',
+        flexDirection:'row',
+        textAlign: 'center',
+     
+      },
+      inputNumberIncDec: {
+        justifyContent: 'center',
+        alignItems:'center',
+        backgroundColor: '#fff',
+        margin: 8,
+        borderRadius: 10,
+        padding: 4
+      },
+      rowCenter: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems:'center',
+      } 
   })
