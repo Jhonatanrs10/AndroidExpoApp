@@ -21,6 +21,7 @@ export function Database({ closeWindow }) {
   async function deleteAllData() {
 
     await AsyncStorage.removeItem(JhonatanrsAppDatabase);
+    await AsyncStorage.removeItem('@JhonatanrsAndroidExpoApp:MarketLocalAtual');
     ToastAndroid.show('Database ('+JhonatanrsAppDatabase.substring(26)+') deleted.', ToastAndroid.SHORT);
     closeWindow();
   }
@@ -48,15 +49,17 @@ export function Database({ closeWindow }) {
         const amount = pItens[1];
         const value = pItens[2];
         const date = pItens[3];
+        const localMarket = pItens[4];
         const inewData = {
           id,
           product,
           amount,
           value,
-          date
+          date,
+          localMarket
         }
 
-        if (pItens[6] == undefined) {
+        if (pItens[4] == undefined) {
           ToastAndroid.show('ERRO on import (ID:' + id + ')', ToastAndroid.LONG);
         } else {
           const response = await AsyncStorage.getItem(JhonatanrsAppDatabase);
@@ -86,16 +89,17 @@ export function Database({ closeWindow }) {
 
     for (var i = 0; i < data.length; i++) {
       var exportData = '';
-      exportData += '[' + (data[i].id) + '[';
+      exportData += (data[i].id) + '[';
       exportData += (data[i].product) + '[';
       exportData += (data[i].amount) + '[';
       exportData += (data[i].value) + '[';
-      exportData += (data[i].date);
+      exportData += (data[i].date) + '[';
+      exportData += (data[i].localMarket);
       exportDataTxt += (exportData) + ']\n';
     }
       try {
         const result = await Share.share({
-          message: ('ItensData\n\nid[product[amount[value[date]' + '\n' + exportDataTxt),
+          message: ('ItensData\n\nid[product[amount[value[date[localMarket]' + '\n' + exportDataTxt),
           
         });
 
@@ -118,10 +122,10 @@ export function Database({ closeWindow }) {
     <View style={styles.containerIndex}>
       <View style={styles.window}>
         <View style={styles.barThin}>
-          <Text style={styles.textBar}>Anime Database</Text>
+          <Text style={styles.textBar}>Database</Text>
         </View>
         <View style={styles.form}>
-          <TextInput multiline={true} placeholder={'Insert data for import\n\nproduct[amount[value[date]'} maxLength={99999999} onChangeText={setDataForImport}></TextInput>
+          <TextInput multiline={true} placeholder={'Insert data for import\n\nproduct[amount[value[date[localMarket]'} maxLength={99999999} onChangeText={setDataForImport}></TextInput>
         </View>
       </View>
       <View style={styles.containerDock}>

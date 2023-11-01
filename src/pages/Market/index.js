@@ -9,19 +9,20 @@ import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhr
 
 export function Market({ closeWindow, openWindow }) {
 
-  function getMonthTrue(month) {
-    if (month + 1 < 10) {
-      return ('0' + (month + 1))
+  function getNTrue(n) {
+    if (n < 10) {
+      return ('0' + (n))
     } else {
-      return (month + 1)
+      return (n)
     }
   }
 
-  const [today, setToday] = useState((new Date().getDate()) + '/' + getMonthTrue(new Date().getMonth()) + '/' + new Date().getFullYear());
+  const [today, setToday] = useState(getNTrue(new Date().getDate()) + '/' + (getNTrue(new Date().getMonth()+1)) + '/' + getNTrue(new Date().getFullYear()));
 
   const [data, setData] = useState(null);
   const [pageManage, setPageManage] = useState(false);
   const [database, setDatabase] = useState(false);
+
 
   function abrirDatabase() {
     setDatabase(true);
@@ -33,18 +34,23 @@ export function Market({ closeWindow, openWindow }) {
   }
 
   const [search, setSearch] = useState('');
-  const [searchType, setSearchType] = useState('product');
+  const [searchType, setSearchType] = useState('Produto');
   const [filteredData, setFilteredData] = useState([]);
   const [myData, setMyData] = useState(null);
 
+  const [allMarkets, setAllMarkets] = useState([]);
+
 
   const searchMode = () => {
-    if (searchType == "product") {
+    if (searchType == "Produto") {
       setSearch('')
-      setSearchType("date")
-    } else if (searchType == "date") {
+      setSearchType("Data")
+    } else if (searchType == "Data") {
       setSearch('')
-      setSearchType("product")
+      setSearchType("Local")
+    } else if (searchType == "Local") {
+      setSearch('')
+      setSearchType("Produto")
     }
   }
 
@@ -56,17 +62,21 @@ export function Market({ closeWindow, openWindow }) {
       const data = response ? JSON.parse(response) : [];
       let sortedData = [...data]
       let sortedDataDate = []
+      let allMarkets = []
       let totalMarket = 0
 
       for (var i = 0; i < data.length; i++) {
+        allMarkets.push(data[i].localMarket)
         if (data[i].date == today) {
           sortedDataDate.push(data[i])
           totalMarket += (Number(data[i].amount) * Number((((data[i].value).replaceAll("R$", "")).replaceAll(".", "")).replaceAll(",", ".")));
         }
       }
 
+      
+      setAllMarkets(allMarkets)
       setTotalMarket(totalMarket)
-      sortedData.sort((a, b) => (a.date < b.date) ? 1 : (b.date < a.date) ? -1 : 0)
+      sortedData.sort((a, b) => (((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2)) < ((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2))) ? 1 : (((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2)) < ((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2))) ? -1 : 0)
       setMyData(sortedData)
       setFilteredData(sortedDataDate)
 
@@ -89,15 +99,21 @@ export function Market({ closeWindow, openWindow }) {
     if (text) {
       const dataFiltrada = myData.filter(
         function (item) {
-          if (searchType == 'product') {
+          if (searchType == 'Produto') {
             if (item.product) {
               const itemData = item.product.toUpperCase();
               const textData = text.toUpperCase();
               return itemData.indexOf(textData) > -1;
             }
-          } else if (searchType == 'date') {
+          } else if (searchType == 'Data') {
             if (item.date) {
               const itemData = item.date.toUpperCase();
+              const textData = text.toUpperCase();
+              return itemData.indexOf(textData) > -1;
+            }
+          } else if (searchType == 'Local') {
+            if (item.localMarket) {
+              const itemData = item.localMarket.toUpperCase();
               const textData = text.toUpperCase();
               return itemData.indexOf(textData) > -1;
             }
@@ -116,7 +132,7 @@ export function Market({ closeWindow, openWindow }) {
     return (
       <View style={styles.containerItemList} onPress={() => abrirPageManage(item)}>
         <View flex={1}>
-          <Text paddingBottom={5} numberOfLines={1} width={'auto'} onPress={() => abrirPageManage(item)}>({item?.date})</Text>
+          <Text paddingBottom={5} numberOfLines={1} width={'auto'} onPress={() => abrirPageManage(item)}>({item?.date}) {item?.localMarket}</Text>
           <Text size={40} style={styles.textBar20} paddingBottom={5} numberOfLines={1} width={'auto'} onPress={() => abrirPageManage(item)}>{Capitalize(item?.product)} </Text>
           <Text numberOfLines={1} width={'auto'} onPress={() => abrirPageManage(item)}>( {item?.amount}x {item?.value} )</Text>
           <TextInputMask style={styles.textBar20} color={'black'} type={'money'} readOnly={true} value={Number(item?.amount) * Number(((((item?.value).replaceAll("R$", "")).replaceAll(".", "")).replaceAll(",", ".")))} />
@@ -137,7 +153,7 @@ export function Market({ closeWindow, openWindow }) {
             <Text style={styles.textBar}>MERCADO </Text>
             <TextInputMask style={styles.textBar} keyboardType='numeric' placeholder="Date" type={'datetime'} options={{ format: 'DD/MM/YYYY' }} value={today} onChangeText={setToday} />
           </View>
-          <View style={styles.rowCenter}>
+          <View flex={1} style={styles.rowCenter}>
             <Text style={styles.textBar}>Total: </Text>
             <TextInputMask style={styles.textBar} color={'black'} type={'money'} readOnly={true} value={totalMarket} />
           </View>
@@ -169,7 +185,7 @@ export function Market({ closeWindow, openWindow }) {
         </TouchableOpacity>
       </View>
       <Modal visible={pageManage} animationType="fade">
-        <Manage closeWindow={() => { setPageManage(false); closeWindow(); openWindow() }} item={data} />
+        <Manage closeWindow={() => { setPageManage(false); closeWindow(); openWindow() }} item={data} allMarkets={allMarkets}/>
       </Modal>
       <Modal visible={database} animationType="fade" transparent={true}>
         <Database closeWindow={() => { setDatabase(false); closeWindow(); openWindow() }} />

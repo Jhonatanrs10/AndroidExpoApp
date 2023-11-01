@@ -6,30 +6,46 @@ import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhr
 import { JhonatanrsAppDatabase } from './database';
 import styles from '../../styles/styles'
 import * as Clipboard from 'expo-clipboard';
-import { mouseProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 
-export function Manage({ closeWindow, item }) {
+export function Manage({ closeWindow, item, allMarkets }) {
 
   let day = new Date().getDate(); //Para obter o dia
   let month = new Date().getMonth() + 1; //Para obter o mês
   let year = new Date().getFullYear(); //Para obter o ano
 
+   async function getLocal() {
+    const local = await AsyncStorage.getItem('@JhonatanrsAndroidExpoApp:MarketLocalAtual')
+    setLocalMarket(local)
+  }
+
+  function getNTrue(n) {
+    if (n < 10) {
+      return ('0' + (n))
+    } else {
+      return (n)
+    }
+  }
 
   const [barTitle, setBarTitle] = useState("New Product");
 
   const [product, setProduct] = useState("");
   const [amount, setAmount] = useState("1");
   const [value, setValue] = useState("");
-  const [date, setDate] = useState(day+"/"+month+"/"+year);
+  const [date, setDate] = useState(getNTrue(new Date().getDate()) + '/' + (getNTrue(new Date().getMonth()+1)) + '/' + getNTrue(new Date().getFullYear()));
+  const [localMarket, setLocalMarket] = useState("");
+
+  
 
   useEffect(() => {
+    const teste123 = getLocal()
     if (item !== "empty") {
       setBarTitle('Edit Product (ID:' + item.id + ')')
       setProduct(item.product);
       setAmount(item.amount);
       setValue(item.value);
       setDate(item.date);
+      setLocalMarket(item.localMarket);
     }
   }, []);
 
@@ -52,13 +68,15 @@ export function Manage({ closeWindow, item }) {
         const amount = (data[i].amount);
         const value = (data[i].value);
         const date = (data[i].date);
+        const localMarket = (data[i].localMarket);
 
         const indexData = {
           id,
           product,
           amount,
           value,
-          date
+          date,
+          localMarket
         }
         allData.push(indexData)
       }
@@ -77,10 +95,10 @@ export function Manage({ closeWindow, item }) {
     const response = await AsyncStorage.getItem(JhonatanrsAppDatabase);
     const data = response ? JSON.parse(response) : [];
     var allData = [];
-    if (product == "") {
+    if (product == "" || amount == "" || value == "" || date == "" || localMarket == "") {
       alert("All Fields are required");
-    } else if (product.indexOf("[") != -1 == true || product.indexOf("]") != -1 == true) {
-      alert("Product cannot have the characters ([) and (]).");
+    } else if (product.indexOf("[") != -1 == true || product.indexOf("]") != -1 == true || localMarket.indexOf("[") != -1 == true || localMarket.indexOf("]") != -1 == true) {
+      alert("Product and Local cannot have the characters ([) and (]).");
     } else {
       for (var i = 0; i < data.length; i++) {
         if (valueId == data[i].id) {
@@ -89,7 +107,8 @@ export function Manage({ closeWindow, item }) {
             product,
             amount,
             value,
-            date
+            date,
+            localMarket
           }
           allData.push(indexData)
         } else {
@@ -98,13 +117,16 @@ export function Manage({ closeWindow, item }) {
           const amount = (data[i].amount);
           const value = (data[i].value);
           const date = (data[i].date);
+          const localMarket = (data[i].localMarket);
+
 
           const indexData = {
             id,
             product,
             amount,
             value,
-            date
+            date,
+            localMarket
           }
           allData.push(indexData)
         }
@@ -123,24 +145,27 @@ export function Manage({ closeWindow, item }) {
       count = data[i].id
     }
     const nextId = count + 1
+
     try {
-      if (product == "" || amount == "" || value == "" || date == "") {
+      if (product == "" || amount == "" || value == "" || date == "" || localMarket == "") {
         alert("All fields are required.");
-      } else if (product.indexOf("[") != -1 == true || product.indexOf("]") != -1 == true) {
-        alert("Product cannot have the characters ([) and (]).");
+      } else if (product.indexOf("[") != -1 == true || product.indexOf("]") != -1 == true || localMarket.indexOf("[") != -1 == true || localMarket.indexOf("]") != -1 == true) {
+        alert("Product and Local cannot have the characters ([) and (]).");
       } else {
-        
+
         const newData = {
           id: nextId,
           product,
           amount,
           value,
-          date
+          date,
+          localMarket
         }
         const response = await AsyncStorage.getItem(JhonatanrsAppDatabase);
         const previousData = response ? JSON.parse(response) : [];
         const data = [...previousData, newData];
         await AsyncStorage.setItem(JhonatanrsAppDatabase, JSON.stringify(data));//json string convert array para string
+        await AsyncStorage.setItem('@JhonatanrsAndroidExpoApp:MarketLocalAtual', localMarket)
         ToastAndroid.show('Saved successfully.', ToastAndroid.SHORT);
         closeWindow();
       }
@@ -202,6 +227,16 @@ export function Manage({ closeWindow, item }) {
     setlinkW(text);
   };
 
+  function whatMarket() {
+    for (var i = 0; i < allMarkets.length; i++) {
+      if (localMarket == allMarkets[allMarkets.length-1] || localMarket == "") {
+        setLocalMarket(allMarkets[0])
+      } else if (localMarket == allMarkets[i]){
+        setLocalMarket(allMarkets[i+1])
+      }
+    }
+  }
+
   return (
     <View style={styles.containerIndex}>
       <View style={styles.window}>
@@ -210,10 +245,10 @@ export function Manage({ closeWindow, item }) {
         </View>
         <View style={styles.form}>
           <ScrollView showsVerticalScrollIndicator={false}>
-          <TextInput style={styles.input} marginTop={15} placeholder="Product" value={product} onChangeText={setProduct} />
+            <TextInput style={styles.input} marginTop={15} placeholder="Product" value={product} onChangeText={setProduct} />
 
-          <TextInputMask style={styles.input} maxLength={20}keyboardType='numeric' placeholder="Value" type={'money'} value={value} onChangeText={setValue}/>
-            
+            <TextInputMask style={styles.input} maxLength={20} keyboardType='numeric' placeholder="Value" type={'money'} value={value} onChangeText={setValue} />
+
             <View style={styles.inputNumber}>
               <TouchableOpacity activeOpacity={0.3} style={styles.inputNumberIncDec} onPress={() => setAmount(decrease(amount))}>
                 <Entypo name="minus" size={20} color="#808080" />
@@ -223,9 +258,15 @@ export function Manage({ closeWindow, item }) {
                 <Entypo name="plus" size={20} color="#808080" />
               </TouchableOpacity>
             </View>
-            
-           <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Date" type={'datetime'} options={{   format: 'DD/MM/YYYY' }} value={date} onChangeText={setDate} />
 
+            <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Date" type={'datetime'} options={{ format: 'DD/MM/YYYY' }} value={date} onChangeText={setDate} />
+
+            <View style={styles.inputNumber}>
+              <TextInput flex={1} marginStart={15} placeholder="Digite um local" value={localMarket} onChangeText={setLocalMarket} />
+              <TouchableOpacity activeOpacity={0.3} style={styles.inputNumberIncDec} onPress={whatMarket}>
+                <Text flex={1} style={styles.textAlignCenter}>Conhecidos</Text>
+              </TouchableOpacity>
+            </View>
 
           </ScrollView>
         </View>

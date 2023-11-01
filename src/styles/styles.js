@@ -6,32 +6,33 @@ export default StyleSheet.create({
     containerApp: {
       flex: 1,
       backgroundColor: '#B0C4DE',
-      padding: '15%',
-      flexDirection: 'row',
     },
     viewButtonsApp: {
       flex: 1,
-      flexDirection: 'column-reverse',
-      justifyContent: 'space-around',
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      flexWrap: 'wrap-reverse',
       alignContent: 'center',
+      alignItems: 'center',
+      margin: 10,
     },
     buttonIconApp: {
       padding: 0,
       margin: 0,
-      height: 40,
-      width: 40,
+      height: 70,
+      width: 70,
     },
     buttonsApp: {
       backgroundColor: '#fff',
       justifyContent: 'center',
       alignItems: "center",
       alignContent: 'center',
-      borderRadius: 13,
-      height: 60,
-      width: 60,
+      borderRadius: 20,
+      margin: 5,
+      height: 100,
+      width: 100,
       borderColor: 'black',
-      borderWidth: 1,
+      borderWidth: 3,
     },
     //INDEX
     containerIndex: {
@@ -54,7 +55,7 @@ export default StyleSheet.create({
         borderTopEndRadius: 10,
         backgroundColor: '#B0C4DE',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent:'space-between',
         alignItems: 'center',
         borderBottomColor: 'black',
         borderBottomWidth: 1,
@@ -62,6 +63,7 @@ export default StyleSheet.create({
       },
       textBar: {
         fontWeight: "bold",
+        alignSelf: 'center'
       },
       textBar20: {
         fontWeight: "bold",
@@ -141,7 +143,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         height: '100%',
-        width: 30,
+        width: 45,
       },
       //ADD
       barThin: {
@@ -205,9 +207,18 @@ export default StyleSheet.create({
         padding: 4
       },
       rowCenter: {
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignContent: 'center',
         alignItems:'center',
-      } 
+      },
+      preencher:{
+        flexDirection: "row"
+      },
+      viewLetreiro:{
+        alignContent:'center',
+        marginStart: 10,
+        marginEnd: 10,
+      }
   })

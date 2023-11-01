@@ -170,8 +170,8 @@ export function Anime({ closeWindow, openWindow }) {
     <View style={styles.containerIndex}>
       <View style={styles.window}>
         <View style={styles.bar}>
-          <Text style={styles.textBar}>ANIMES</Text>
-          <Text style={styles.textBar}>( Watching {myDataTotalAnimesW} & Completed {myDataTotalAnimesC} & Hours {myDataTotalHours} )</Text>
+          <Text flex={1} style={styles.textBar}>ANIMES</Text>
+          <Text flex={1} style={styles.textBar}>( Watching {myDataTotalAnimesW} & Completed {myDataTotalAnimesC} & Hours {myDataTotalHours} )</Text>
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}

@@ -109,7 +109,7 @@ export function Database({ closeWindow }) {
 
     for (var i = 0; i < data.length; i++) {
       var exportData = '';
-      exportData += '[' + (data[i].id) + '[';
+      exportData += (data[i].id) + '[';
       exportData += (data[i].name) + '[';
       exportData += (data[i].status) + '[';
       exportData += (data[i].release) + '[';
@@ -152,7 +152,7 @@ export function Database({ closeWindow }) {
     <View style={styles.containerIndex}>
       <View style={styles.window}>
         <View style={styles.barThin}>
-          <Text style={styles.textBar}>Anime Database</Text>
+          <Text style={styles.textBar}>Database</Text>
         </View>
         <View style={styles.form}>
           <TextInput multiline={true} placeholder={'Insert data for import\n\nname[status[release[obs[linkW\n[season01[season02[season03[season04[season05\n[season06[season07[season08[season09[season10]'} maxLength={99999999} onChangeText={setDataForImport}></TextInput>

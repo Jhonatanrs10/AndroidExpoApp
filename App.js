@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styles from './src/styles/styles'
 import { Market } from "./src/pages/Market";
-//import { JhonatanrsAppDatabase } from './manageDatabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
 
   const [pageAnimes, setPageAnimes] = useState(false);
@@ -23,18 +23,34 @@ export default function App() {
     setPageMarket(true);
   }
 
+  getAllKeys = async () => {
+    let keys = []
+    try {
+      keys = await AsyncStorage.getAllKeys()
+    } catch (e) {
+      // read key error
+    }
+
+    console.log(keys)
+    // example console.log result:
+    // ['@MyApp_user', '@MyApp_key']
+  }
+  getAllKeys()
+
+
   //AsyncStorage.removeItem(JhonatanrsAppDatabase);
   return (
     <View style={styles.containerApp}>
+      <StatusBar style='auto' />
       <View style={styles.viewButtonsApp}>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsApp} onPress={abrirPageAnimes}>
           <Image style={styles.buttonIconApp} source={require('./assets/animes.png')} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsApp} onPress={abrirPageFinancial}>
-          <Text>Financial</Text>
+          <Image style={styles.buttonIconApp} source={require('./assets/finance.png')} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.3} style={styles.buttonsApp} onPress={abrirPageMarket}>
-          <Text>Market</Text>
+          <Image style={styles.buttonIconApp} source={require('./assets/market.png')} />
         </TouchableOpacity>
       </View>
       <View>
@@ -48,7 +64,6 @@ export default function App() {
           <Market closeWindow={() => setPageMarket(false)} openWindow={() => setPageMarket(true)} />
         </Modal>
       </View>
-      <StatusBar style='auto' />
     </View>
   );
 }
