@@ -99,7 +99,7 @@ export function Database({ closeWindow }) {
     }
       try {
         const result = await Share.share({
-          message: ('ItensData\n\nid[product[amount[value[date[localMarket]' + '\n' + exportDataTxt),
+          message: ('MarketData\n\nid[product[amount[value[date[localMarket]' + '\n' + exportDataTxt),
           
         });
 
