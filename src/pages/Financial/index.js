@@ -114,7 +114,8 @@ export function Financial({ closeWindow, openWindow }) {
       allInvestments.push(invRendaFixa)
       allInvestments.push(rendFiis)
       setInvestments(allInvestments)
-
+      
+      sortedData.sort((a, b) => (a.id < b.id) ? 1 : (b.id < a.id) ? -1 : 0)
       sortedData.sort((a, b) => (((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2)) < ((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2))) ? 1 : (((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2)) < ((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2))) ? -1 : 0)
       setMyData(sortedData)
       setFilteredData(sortedData)

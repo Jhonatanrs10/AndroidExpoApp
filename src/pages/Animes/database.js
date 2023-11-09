@@ -11,6 +11,7 @@ export const JhonatanrsAppDatabase = "@JhonatanrsAndroidExpoApp:Animes"
 export function Database({ closeWindow }) {
 
   const [dataForImport, setDataForImport] = useState(null);
+  const dateNow = '('+new Date().getDate()+'-'+(new Date().getMonth()+1)+'-'+new Date().getFullYear()+')('+new Date().getHours()+':'+new Date().getMinutes()+')'
 
   function abrirDelete() {
     Alert.alert('Delete database ('+JhonatanrsAppDatabase.substring(26)+')', 'Are you sure about this choice?', [
@@ -129,7 +130,7 @@ export function Database({ closeWindow }) {
     }
       try {
         const result = await Share.share({
-          message: ('AnimesData\n\nid[name[status[release[obs[linkW[season01[season02[season03[season04[season05[season06[season07[season08[season09[season10]' + '\n' + exportDataTxt),
+          message: ('Anim'+dateNow+'\nid[name[status[release[obs[linkW[season01[season02[season03[season04[season05[season06[season07[season08[season09[season10]' + '\n' + exportDataTxt),
           
         });
 

@@ -73,7 +73,8 @@ export function Market({ closeWindow, openWindow }) {
         }
       }
 
-      
+      sortedData.sort((a, b) => (a.id < b.id) ? 1 : (b.id < a.id) ? -1 : 0)
+      sortedDataDate.sort((a, b) => (a.id < b.id) ? 1 : (b.id < a.id) ? -1 : 0)
       setAllMarkets(allMarkets)
       setTotalMarket(totalMarket)
       sortedData.sort((a, b) => (((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2)) < ((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2))) ? 1 : (((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2)) < ((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2))) ? -1 : 0)

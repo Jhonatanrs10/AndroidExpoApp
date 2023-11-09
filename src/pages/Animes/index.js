@@ -69,6 +69,8 @@ export function Anime({ closeWindow, openWindow }) {
       setMyDataTotalAnimesW(totalAnimesW)
       setMyDataTotalHours(totalHours)
       let sortedData = [...data]
+      sortedData.sort((a, b) => (a.id < b.id) ? 1 : (b.id < a.id) ? -1 : 0)
+      sortedDataW.sort((a, b) => (a.id < b.id) ? 1 : (b.id < a.id) ? -1 : 0)
       sortedDataW.sort((a, b) => (a.release > b.release) ? 1 : (b.release > a.release) ? -1 : 0)
       setMyData(sortedData)
       setFilteredData(sortedDataW)

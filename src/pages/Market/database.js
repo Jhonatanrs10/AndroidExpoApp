@@ -11,6 +11,7 @@ export const JhonatanrsAppDatabase = "@JhonatanrsAndroidExpoApp:Market"
 export function Database({ closeWindow }) {
 
   const [dataForImport, setDataForImport] = useState(null);
+  const dateNow = '('+new Date().getDate()+'-'+(new Date().getMonth()+1)+'-'+new Date().getFullYear()+')('+new Date().getHours()+':'+new Date().getMinutes()+')'
 
   function abrirDelete() {
     Alert.alert('Delete database ('+JhonatanrsAppDatabase.substring(26)+')', 'Are you sure about this choice?', [
@@ -99,7 +100,7 @@ export function Database({ closeWindow }) {
     }
       try {
         const result = await Share.share({
-          message: ('MarketData\n\nid[product[amount[value[date[localMarket]' + '\n' + exportDataTxt),
+          message: ('Mark'+dateNow+'\nid[product[amount[value[date[localMarket]' + '\n' + exportDataTxt),
           
         });
 
