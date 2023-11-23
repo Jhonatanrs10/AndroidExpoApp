@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, ScrollView, Alert, FlatList, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
 import { JhonatanrsAppDatabase } from './database';
 import styles from '../../styles/styles'
 import * as Clipboard from 'expo-clipboard';
-import { mouseProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 
 export function Manage({ closeWindow, item, allOperation }) {
@@ -24,8 +23,9 @@ export function Manage({ closeWindow, item, allOperation }) {
   const [product, setProduct] = useState("");
   const [amount, setAmount] = useState("1");
   const [value, setValue] = useState("");
-  const [date, setDate] = useState(getNTrue(new Date().getDate()) + '/' + (getNTrue(new Date().getMonth()+1)) + '/' + getNTrue(new Date().getFullYear()));
-  const [operation, setOperation] = useState(allOperation[0]);
+  const [date, setDate] = useState(getNTrue(new Date().getDate()) + '/' + (getNTrue(new Date().getMonth() + 1)) + '/' + getNTrue(new Date().getFullYear()));
+  const [operation, setOperation] = useState(allOperation[0].op);
+  const [operationList, setOperationList] = useState(false)
 
   useEffect(() => {
     if (item !== "empty") {
@@ -37,35 +37,6 @@ export function Manage({ closeWindow, item, allOperation }) {
       setOperation(item.operation);
     }
   }, []);
-
-  const changeOperation = () => {
-    if (operation == allOperation[0]) {
-      setOperation(allOperation[1])
-    } else if (operation == allOperation[1]) {
-      setOperation(allOperation[2])
-    } else if (operation == allOperation[2]) {
-      setOperation(allOperation[3])
-    } else if (operation == allOperation[3]) {
-      setOperation(allOperation[4])
-    } else if (operation == allOperation[4]) {
-      setOperation(allOperation[5])
-    } else if (operation == allOperation[5]) {
-      setOperation(allOperation[6])
-    } else if (operation == allOperation[6]) {
-      setOperation(allOperation[7])
-    } else if (operation == allOperation[7]) {
-      setOperation(allOperation[8])
-    } else if (operation == allOperation[8]) {
-      setOperation(allOperation[9])
-    } else if (operation == allOperation[9]) {
-      setOperation(allOperation[10])
-    } else if (operation == allOperation[10]) {
-      setOperation(allOperation[0])
-    } else {
-      setOperation(allOperation[0])
-    }
-  }
-
 
   function deleteEdit() {
     Alert.alert('Delete (ID:' + item.id + ')', 'Are you sure about this choice?', [
@@ -248,6 +219,7 @@ export function Manage({ closeWindow, item, allOperation }) {
           <Text style={styles.textBar}>{barTitle}</Text>
         </View>
         <View style={styles.form}>
+
           <ScrollView showsVerticalScrollIndicator={false}>
             <TextInput style={styles.input} marginTop={15} placeholder="Product" value={product} onChangeText={setProduct} />
             <View style={styles.inputNumber}>
@@ -263,11 +235,30 @@ export function Manage({ closeWindow, item, allOperation }) {
             <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Value" type={'money'} options={{ precision: 2, separator: ',', delimiter: '.', unit: 'R$', suffixUnit: '' }} value={value} onChangeText={setValue} />
             <TextInputMask style={styles.input} keyboardType='numeric' placeholder="Date" type={'datetime'} options={{ format: 'DD/MM/YYYY' }} value={date} onChangeText={setDate} />
 
-            <TouchableOpacity  activeOpacity={0.3} style={styles.input} onPress={changeOperation}>
+            <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={() => setOperationList(true)}>
               <Text flex={1} style={styles.textAlignCenter}>Operation: {operation.substring(3)}</Text>
             </TouchableOpacity>
 
+            <Modal visible={operationList} animationType="fade" onRequestClose={() => setOperationList(false)}>
+              <View style={styles.window}>
+                <View style={styles.barThin}>
+                  <Text style={styles.textBar}>Operations</Text>
+                </View>
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={allOperation}
+                  refreshing={true}
+                  renderItem={({ item }) => <View style={styles.input} onPress={() => { setOperation(item.op); setOperationList(false) }}><Text style={styles.textAlignCenter} onPress={() => { setOperation(item.op); setOperationList(false) }}>{item.op}</Text></View>}
+                />
+              </View>
+              <View style={styles.containerDock}>
+                <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => setOperationList(false)}>
+                  <AntDesign name="back" size={30} color="#808080" />
+                </TouchableOpacity>
+              </View>
+            </Modal>
           </ScrollView>
+
         </View>
       </View>
       <ViewDock />

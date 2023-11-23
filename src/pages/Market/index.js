@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity, ToastAndroid, Modal, FlatList, Linking, TextInput } from 'react-native';
-import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { JhonatanrsAppDatabase, Database } from './database';
@@ -66,7 +66,10 @@ export function Market({ closeWindow, openWindow }) {
       let totalMarket = 0
 
       for (var i = 0; i < data.length; i++) {
-        allMarkets.push(data[i].localMarket)
+        const marketOne = {
+          market: data[i].localMarket
+        }
+        allMarkets.push(marketOne)
         if (data[i].date == today) {
           sortedDataDate.push(data[i])
           totalMarket += (Number(data[i].amount) * Number((((data[i].value).replaceAll("R$", "")).replaceAll(".", "")).replaceAll(",", ".")));
@@ -75,7 +78,9 @@ export function Market({ closeWindow, openWindow }) {
 
       sortedData.sort((a, b) => (a.id < b.id) ? 1 : (b.id < a.id) ? -1 : 0)
       sortedDataDate.sort((a, b) => (a.id < b.id) ? 1 : (b.id < a.id) ? -1 : 0)
-      setAllMarkets(allMarkets)
+      const map = new Map();
+      allMarkets.forEach(item => {map.set(item.market, item)})
+      setAllMarkets(Array.from(map.values()))
       setTotalMarket(totalMarket)
       sortedData.sort((a, b) => (((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2)) < ((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2))) ? 1 : (((b.date).slice(6,10)+(b.date).slice(3,5)+(b.date).slice(0,2)) < ((a.date).slice(6,10)+(a.date).slice(3,5)+(a.date).slice(0,2))) ? -1 : 0)
       setMyData(sortedData)
@@ -139,7 +144,7 @@ export function Market({ closeWindow, openWindow }) {
           <TextInputMask style={styles.textBar20} color={'black'} type={'money'} readOnly={true} value={Number(item?.amount) * Number(((((item?.value).replaceAll("R$", "")).replaceAll(".", "")).replaceAll(",", ".")))} />
         </View>
         <TouchableOpacity style={styles.buttonsItemListIntegrated} activeOpacity={0.3} onPress={() => setToday(item?.date)}>
-          <FontAwesome5 name="calendar-day" size={20} color='#808080' />
+          <MaterialCommunityIcons name="calendar-today" size={20} color='#808080' />
         </TouchableOpacity>
       </View>
     );
@@ -185,10 +190,10 @@ export function Market({ closeWindow, openWindow }) {
           <AntDesign name="close" size={30} color="#808080" />
         </TouchableOpacity>
       </View>
-      <Modal visible={pageManage} animationType="fade">
+      <Modal visible={pageManage} animationType="fade" onRequestClose={() => setPageManage(false)}>
         <Manage closeWindow={() => { setPageManage(false); closeWindow(); openWindow() }} item={data} allMarkets={allMarkets}/>
       </Modal>
-      <Modal visible={database} animationType="fade" transparent={true}>
+      <Modal visible={database} animationType="fade" transparent={true} onRequestClose={() => setDatabase(false)}>
         <Database closeWindow={() => { setDatabase(false); closeWindow(); openWindow() }} />
       </Modal>
     </View>

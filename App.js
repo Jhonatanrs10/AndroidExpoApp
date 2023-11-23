@@ -54,13 +54,13 @@ export default function App() {
         </TouchableOpacity>
       </View>
       <View>
-        <Modal visible={pageAnimes} animationType="fade">
+        <Modal visible={pageAnimes} animationType="fade" onRequestClose={() => setPageAnimes(false)}>
           <Anime closeWindow={() => setPageAnimes(false)} openWindow={() => setPageAnimes(true)} />
         </Modal>
-        <Modal visible={pageFinancial} animationType="fade">
+        <Modal visible={pageFinancial} animationType="fade" onRequestClose={() => setPageFinancial(false)}>
           <Financial closeWindow={() => setPageFinancial(false)} openWindow={() => setPageFinancial(true)} />
         </Modal>
-        <Modal visible={pageMarket} animationType="fade">
+        <Modal visible={pageMarket} animationType="fade" onRequestClose={() => setPageMarket(false)}>
           <Market closeWindow={() => setPageMarket(false)} openWindow={() => setPageMarket(true)} />
         </Modal>
       </View>

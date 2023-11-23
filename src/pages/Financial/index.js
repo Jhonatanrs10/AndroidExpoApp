@@ -28,18 +28,53 @@ export function Financial({ closeWindow, openWindow }) {
   const [myData, setMyData] = useState(null);
 
   const allOperation = [
-    "00-Transferencia Enviada",
-    "01-Tranferencia Recebida",
-    "02-Emprestei",
-    "03-Emprestimo",
-    "04-Investimento em Renda Fixa",
-    "05-Resgate Renda Fixa",
-    "06-Investimento em Tesouro",
-    "07-Resgate Tesouro",
-    "08-Investimento em FIIs",
-    "09-Resgate FIIs",
-    "10-Dividendos do FIIs",
+    {
+        op:'00-Transferencia Enviada'
+    },
+   {
+        op:'01-Transferencia Recebida'
+    },
+   {
+        op:'02-Emprestado Enviada'
+    },
+   {
+        op:'03-Emprestado Recebida'
+    },
+   {
+        op:'04-Investimento em Renda Fixa'
+    },
+   {
+        op:'05-Resgate Renda Fixa'
+    },
+   {
+        op:'06-Investimento em Tesouro'
+    },
+   {
+        op:'07-Resgate Tesouro'
+    },
+   {
+        op:'08-Investimento em FIIs'
+    },
+   {
+        op:'09-Resgate FIIs'
+    },
+   {
+        op:'10-Dividendos do FIIs'
+    },
+   {
+        op:'11-T. Enviada (SaldoMãe)'
+    },
+   {
+        op:'12-T. Recebida (SaldoMãe)'
+    },
+   {
+        op:'13-T. Enviada (SaldoPai)'
+    },
+   {
+        op:'14-T. Recebida (SaldoPai)'
+    },
   ]
+
 
   const searchMode = () => {
     if (searchType == "Produto") {
@@ -56,6 +91,15 @@ export function Financial({ closeWindow, openWindow }) {
 
   const [investments, setInvestments] = useState([]);
 
+  function negativeValue(valor){
+    if(valor < 0){
+      return "-"
+    }else{
+      return ""
+    }
+
+  }
+
   async function myItensData(chave) {
     try {
       const response = await AsyncStorage.getItem(chave);
@@ -69,46 +113,64 @@ export function Financial({ closeWindow, openWindow }) {
       let invTesouro = 0
       let rendFiis = 0
       let rendFiisMonth = 0
+      let saldoMae = 0
+      let saldoPai = 0
 
       for (var i = 0; i < data.length; i++) {
 
         const amountValueFormat = (Number(data[i].amount) * Number((((data[i].value).replaceAll("R$", "")).replaceAll(".", "")).replaceAll(",", ".")));
-        
-        if (data[i].operation == allOperation[0] || data[i].operation == allOperation[2] || data[i].operation == allOperation[4] || data[i].operation == allOperation[6] || data[i].operation == allOperation[8]) {
+        console.log(allOperation[11].op)
+        if (data[i].operation == allOperation[0].op || data[i].operation == allOperation[2].op || data[i].operation == allOperation[4].op || data[i].operation == allOperation[6].op || data[i].operation == allOperation[8].op || data[i].operation == allOperation[11].op || data[i].operation == allOperation[13].op) {
           saldoAtual -= amountValueFormat
-        } else if (data[i].operation == allOperation[1] || data[i].operation == allOperation[3] || data[i].operation == allOperation[5] || data[i].operation == allOperation[7] || data[i].operation == allOperation[9] || data[i].operation == allOperation[10]) {
+        } else if (data[i].operation == allOperation[1].op || data[i].operation == allOperation[3].op || data[i].operation == allOperation[5].op || data[i].operation == allOperation[7].op || data[i].operation == allOperation[9].op || data[i].operation == allOperation[10].op || data[i].operation == allOperation[12].op || data[i].operation == allOperation[14].op) {
           saldoAtual += amountValueFormat
         }
 
-        if (data[i].operation == allOperation[8]) {
+        if (data[i].operation == allOperation[8].op) {
           invFiis += amountValueFormat
-        } else if (data[i].operation == allOperation[9]) {
+        } else if (data[i].operation == allOperation[9].op) {
           invFiis -= amountValueFormat
         }
 
-        if (data[i].operation == allOperation[6]) {
+        if (data[i].operation == allOperation[6].op) {
           invTesouro += amountValueFormat
-        } else if (data[i].operation == allOperation[7]) {
+        } else if (data[i].operation == allOperation[7].op) {
           invTesouro -= amountValueFormat
         }
 
-        if (data[i].operation == allOperation[4]) {
+        if (data[i].operation == allOperation[4].op) {
           invRendaFixa += amountValueFormat
-        } else if (data[i].operation == allOperation[5]) {
+        } else if (data[i].operation == allOperation[5].op) {
           invRendaFixa -= amountValueFormat
         }
 
-        if (data[i].operation == allOperation[10]) {
+        if (data[i].operation == allOperation[10].op) {
           rendFiis += amountValueFormat
           if (data[i].date.slice(6,10) == new Date().getFullYear() && data[i].date.slice(3,5) == new Date().getMonth()+1) {
             rendFiisMonth += amountValueFormat
           }
         }
 
+        if (data[i].operation == allOperation[11].op) {
+          saldoMae -= amountValueFormat
+        } else if (data[i].operation == allOperation[12].op) {
+          saldoMae += amountValueFormat
+        }
+
+        if (data[i].operation == allOperation[13].op) {
+          saldoPai -= amountValueFormat
+        } else if (data[i].operation == allOperation[14].op) {
+          saldoPai += amountValueFormat
+        }
+
       }
 
       allInvestments.push(saldoAtual)
       allInvestments.push(rendFiisMonth)
+
+      allInvestments.push(saldoMae)
+      allInvestments.push(saldoPai)
+
       allInvestments.push(invFiis)
       allInvestments.push(invTesouro)
       allInvestments.push(invRendaFixa)
@@ -188,18 +250,22 @@ export function Financial({ closeWindow, openWindow }) {
         <View style={styles.bar}>
           <Text style={styles.textBar}>Finance</Text>
           <ScrollView style={styles.viewLetreiro} horizontal={true} showsHorizontalScrollIndicator={false}>
-            <Text alignSelf={'center'}>Saldo Atual: </Text>
+            <Text alignSelf={'center'}>Saldo Atual: {negativeValue(investments[0])}</Text>
             <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[0]} />
-            <Text alignSelf={'center'} > / FIIs Rendimentos: </Text>
+            <Text alignSelf={'center'} > / FIIs Rendimentos: {negativeValue(investments[1])}</Text>
             <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[1]} />
-            <Text alignSelf={'center'} > / FIIs: </Text>
+            <Text alignSelf={'center'} > / SaldoMãe: {negativeValue(investments[2])}</Text>
             <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[2]} />
-            <Text alignSelf={'center'} > / Tesouro: </Text>
+            <Text alignSelf={'center'} > / SaldoPai: {negativeValue(investments[3])}</Text>
             <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[3]} />
-            <Text alignSelf={'center'} > / Renda Fixa: </Text>
+            <Text alignSelf={'center'} > / FIIs: {negativeValue(investments[4])}</Text>
             <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[4]} />
-            <Text alignSelf={'center'} > / FIIs Total Rendimentos: </Text>
+            <Text alignSelf={'center'} > / Tesouro: {negativeValue(investments[5])}</Text>
             <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[5]} />
+            <Text alignSelf={'center'} > / Renda Fixa: {negativeValue(investments[6])}</Text>
+            <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[6]} />
+            <Text alignSelf={'center'} > / FIIs Total Rendimentos: {negativeValue(investments[7])}</Text>
+            <TextInputMask color={'black'} type={'money'} readOnly={true} value={investments[7]} />
           </ScrollView>
         </View>
         <FlatList
@@ -228,10 +294,10 @@ export function Financial({ closeWindow, openWindow }) {
           <AntDesign name="close" size={30} color="#808080" />
         </TouchableOpacity>
       </View>
-      <Modal visible={pageManage} animationType="fade">
+      <Modal visible={pageManage} animationType="fade" onRequestClose={() => setPageManage(false)}>
         <Manage closeWindow={() => { setPageManage(false); closeWindow(); openWindow() }} item={data} allOperation={allOperation} />
       </Modal>
-      <Modal visible={database} animationType="fade" transparent={true}>
+      <Modal visible={database} animationType="fade" transparent={true} onRequestClose={() => setDatabase(false)}>
         <Database closeWindow={() => { setDatabase(false); closeWindow(); openWindow() }} />
       </Modal>
     </View>

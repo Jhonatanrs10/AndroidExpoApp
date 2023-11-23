@@ -201,10 +201,10 @@ export function Anime({ closeWindow, openWindow }) {
           <AntDesign name="close" size={30} color="#808080" />
         </TouchableOpacity>
       </View>
-      <Modal visible={pageManage} animationType="fade">
+      <Modal visible={pageManage} animationType="fade" onRequestClose={() => setPageManage(false)}>
         <Manage closeWindow={() => { setPageManage(false); closeWindow(); openWindow() }} item={data} />
       </Modal>
-      <Modal visible={database} animationType="fade" transparent={true}>
+      <Modal visible={database} animationType="fade" transparent={true} onRequestClose={() => setDatabase(false)}>
         <Database closeWindow={() => { setDatabase(false); closeWindow(); openWindow() }} />
       </Modal>
     </View>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, ScrollView, Alert, Modal, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
@@ -55,25 +55,16 @@ export function Manage({ closeWindow, item }) {
     }
   }
 
-  const changeRelease = () => {
-    if (release == "1-Monday") {
-      setRelease("2-Tuesday")
-    } else if (release == "2-Tuesday") {
-      setRelease("3-Wednesday")
-    } else if (release == "3-Wednesday") {
-      setRelease("4-Thursday")
-    } else if (release == "4-Thursday") {
-      setRelease("5-Friday")
-    } else if (release == "5-Friday") {
-      setRelease("6-Saturday")
-    } else if (release == "6-Saturday") {
-      setRelease("7-Sunday")
-    } else if (release == "7-Sunday") {
-      setRelease("1-Monday")
-    } else {
-      setRelease("1-Monday")
-    }
-  }
+  const [releaseList, setReleaseList] = useState(false)
+  const allRelease = [
+    {release: "1-Monday"},
+    {release: "2-Tuesday"},
+    {release: "3-Wednesday"},
+    {release: "4-Thursday"},
+    {release: "5-Friday"},
+    {release: "6-Saturday"},
+    {release: "7-Sunday"},
+  ]
 
   function deleteEdit() {
     Alert.alert('Delete (ID:' + item.id + ')', 'Are you sure about this choice?', [
@@ -319,9 +310,29 @@ export function Manage({ closeWindow, item }) {
             <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeStatus}>
               <Text style={styles.textAlignCenter}>Status: {status}</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={changeRelease}>
+            <TouchableOpacity activeOpacity={0.3} style={styles.input} onPress={() => setReleaseList(true)}>
               <Text style={styles.textAlignCenter}>Release: {release.substring(2)}</Text>
             </TouchableOpacity>
+
+            <Modal visible={releaseList} animationType="fade" onRequestClose={() => setReleaseList(false)}>
+              <View style={styles.window}>
+                <View style={styles.barThin}>
+                  <Text style={styles.textBar}>Release</Text>
+                </View>
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={allRelease}
+                  refreshing={true}
+                  renderItem={({ item }) => <View style={styles.input} onPress={() => { setRelease(item.release); setReleaseList(false) }}><Text style={styles.textAlignCenter} onPress={() => { setRelease(item.release); setReleaseList(false) }}>{item.release}</Text></View>}
+                />
+              </View>
+              <View style={styles.containerDock}>
+                <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => setReleaseList(false)}>
+                  <AntDesign name="back" size={30} color="#808080" />
+                </TouchableOpacity>
+              </View>
+            </Modal>
+
             <TextInput style={styles.input} placeholder="Obs" value={obs} onChangeText={setObs} />
 
             <View style={styles.inputNumber}>

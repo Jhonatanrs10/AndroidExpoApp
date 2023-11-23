@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ToastAndroid, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid, ScrollView, Alert, Modal, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { TextInputMask } from 'react-native-masked-text'//https://github.com/bhrott/react-native-masked-text
@@ -10,11 +10,13 @@ import * as Clipboard from 'expo-clipboard';
 
 export function Manage({ closeWindow, item, allMarkets }) {
 
+  //console.log(allMarkets)
+
   let day = new Date().getDate(); //Para obter o dia
   let month = new Date().getMonth() + 1; //Para obter o mês
   let year = new Date().getFullYear(); //Para obter o ano
 
-   async function getLocal() {
+  async function getLocal() {
     const local = await AsyncStorage.getItem('@JhonatanrsAndroidExpoApp:MarketLocalAtual')
     setLocalMarket(local)
   }
@@ -32,10 +34,9 @@ export function Manage({ closeWindow, item, allMarkets }) {
   const [product, setProduct] = useState("");
   const [amount, setAmount] = useState("1");
   const [value, setValue] = useState("");
-  const [date, setDate] = useState(getNTrue(new Date().getDate()) + '/' + (getNTrue(new Date().getMonth()+1)) + '/' + getNTrue(new Date().getFullYear()));
+  const [date, setDate] = useState(getNTrue(new Date().getDate()) + '/' + (getNTrue(new Date().getMonth() + 1)) + '/' + getNTrue(new Date().getFullYear()));
   const [localMarket, setLocalMarket] = useState("");
-
-  
+  const [localMarketList, setLocalMarketList] = useState(false)
 
   useEffect(() => {
     const teste123 = getLocal()
@@ -222,21 +223,6 @@ export function Manage({ closeWindow, item, allMarkets }) {
 
   };
 
-  const fetchCopiedText = async () => {
-    const text = await Clipboard.getStringAsync();
-    setlinkW(text);
-  };
-
-  function whatMarket() {
-    for (var i = 0; i < allMarkets.length; i++) {
-      if (localMarket == allMarkets[allMarkets.length-1] || localMarket == "") {
-        setLocalMarket(allMarkets[0])
-      } else if (localMarket == allMarkets[i]){
-        setLocalMarket(allMarkets[i+1])
-      }
-    }
-  }
-
   return (
     <View style={styles.containerIndex}>
       <View style={styles.window}>
@@ -263,10 +249,29 @@ export function Manage({ closeWindow, item, allMarkets }) {
 
             <View style={styles.inputNumber}>
               <TextInput flex={1} marginStart={15} placeholder="Digite um local" value={localMarket} onChangeText={setLocalMarket} />
-              <TouchableOpacity activeOpacity={0.3} style={styles.inputNumberIncDec} onPress={whatMarket}>
-                <Text flex={1} style={styles.textAlignCenter}>Conhecidos</Text>
+              <TouchableOpacity activeOpacity={0.3} style={styles.inputNumberIncDec} onPress={() => setLocalMarketList(true)}>
+                <MaterialCommunityIcons name="storefront" size={20} color="#808080" />
               </TouchableOpacity>
             </View>
+
+            <Modal visible={localMarketList} animationType="fade" onRequestClose={() => setLocalMarketList(false)}>
+              <View style={styles.window}>
+                <View style={styles.barThin}>
+                  <Text style={styles.textBar}>Markets</Text>
+                </View>
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={allMarkets}
+                  refreshing={true}
+                  renderItem={({ item }) => <View style={styles.input} onPress={() => { setLocalMarket(item.market); setLocalMarketList(false) }}><Text style={styles.textAlignCenter} onPress={() => { setLocalMarket(item.market); setLocalMarketList(false) }}>{item.market}</Text></View>}
+                />
+              </View>
+              <View style={styles.containerDock}>
+                <TouchableOpacity activeOpacity={0.3} style={styles.buttonsDock} onPress={() => setLocalMarketList(false)}>
+                  <AntDesign name="back" size={30} color="#808080" />
+                </TouchableOpacity>
+              </View>
+            </Modal>
 
           </ScrollView>
         </View>

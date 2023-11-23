@@ -205,3 +205,69 @@ Rendimentos JSRE11[10[R$0,46[15/09/2023[10-Dividendos do FIIs]
 Rendimentos KNCR11[20[R$1,10[13/10/2023[10-Dividendos do FIIs]
 Rendimentos JSRE11[10[R$0,46[16/10/2023[10-Dividendos do FIIs]
 Coxinha davi[1[R$6,50[25/10/2023[00-Transferencia Enviada]
+
+
+
+
+  const allOperation = [
+    {
+        id:'000',
+        op:'Tranferencia Enviada'
+    },
+   {
+        id:'001',
+        op:'Tranferencia Recebida'
+    },
+   {
+        id:'002',
+        op:'Emprestado Enviada'
+    },
+   {
+        id:'003',
+        op:'Emprestado Recebida'
+    },
+   {
+        id:'004',
+        op:'Investimento em Renda Fixa'
+    },
+   {
+        id:'005',
+        op:'Resgate Renda Fixa'
+    },
+   {
+        id:'006',
+        op:'Investimento em Tesouro'
+    },
+   {
+        id:'007',
+        op:'Resgate Tesouro'
+    },
+   {
+        id:'008',
+        op:'Investimento em FIIs'
+    },
+   {
+        id:'009',
+        op:'Resgate FIIs'
+    },
+   {
+        id:'010',
+        op:'Dividendos do FIIs'
+    },
+   {
+        id:'011',
+        op:'T. Enviada (SaldoMãe)'
+    },
+   {
+        id:'012',
+        op:'T. Recebida (SaldoMãe)'
+    },
+   {
+        id:'013',
+        op:'T. Enviada (SaldoPai)'
+    },
+   {
+        id:'014',
+        op:'T. Recebida (SaldoPai)'
+    },
+  ]
